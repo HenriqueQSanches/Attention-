@@ -1,0 +1,14 @@
+node_modules/
+dist/
+*.local
+*.log
+.DS_Store
+.claude/
+
+# SQLite
+api/data/*.db
+api/data/*.db-*
+
+# TypeScript build info
+web/tsconfig.tsbuildinfo
+*.tsbuildinfo
