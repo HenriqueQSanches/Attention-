@@ -32,8 +32,14 @@ db.exec(`
   );
 `);
 
+try { db.exec("ALTER TABLE character ADD COLUMN gold INTEGER NOT NULL DEFAULT 0"); } catch (_) {}
+try { db.exec("ALTER TABLE character ADD COLUMN sex TEXT NOT NULL DEFAULT 'M'"); } catch (_) {}
+try { db.exec("ALTER TABLE character ADD COLUMN hair TEXT NOT NULL DEFAULT 'curto'"); } catch (_) {}
+
 export const DAILY_XP = 25;
 export const AVULSA_XP = 60;
+export const DAILY_GOLD = 10;
+export const AVULSA_GOLD = 25;
 export const MAX_DAILY = 3;
 
 export function xpToNext(level) {
@@ -54,6 +60,9 @@ function toCharacter(row) {
     accent: row.accent,
     level: row.level,
     xp: row.xp,
+    gold: row.gold ?? 0,
+    sex: row.sex ?? "M",
+    hair: row.hair ?? "curto",
     createdAt: row.created_at,
   };
 }
@@ -66,10 +75,10 @@ export function getCharacter() {
   return toCharacter(characterRow());
 }
 
-export function createCharacter({ name, sigil, accent }) {
+export function createCharacter({ name, sigil, accent, sex, hair }) {
   db.prepare(
-    "INSERT INTO character (name, sigil, accent, level, xp, created_at) VALUES (?, ?, ?, 1, 0, ?)",
-  ).run(name, sigil, accent, new Date().toISOString());
+    "INSERT INTO character (name, sigil, accent, level, xp, gold, sex, hair, created_at) VALUES (?, ?, ?, 1, 0, 0, ?, ?, ?)",
+  ).run(name, sigil, accent, sex ?? "M", hair ?? "curto", new Date().toISOString());
   return getCharacter();
 }
 
@@ -77,23 +86,25 @@ export function resetCharacter() {
   db.exec("DELETE FROM character; DELETE FROM quest;");
 }
 
-function awardXp(gain) {
+function awardXp(xpGain, kind) {
   const row = characterRow();
   if (!row) return { character: null, leveledUp: false, gained: 0 };
 
   const before = row.level;
   let { level, xp } = row;
-  xp += gain;
+  const gold = (row.gold ?? 0) + (kind === "daily" ? DAILY_GOLD : AVULSA_GOLD);
+  xp += xpGain;
   while (xp >= xpToNext(level)) {
     xp -= xpToNext(level);
     level += 1;
   }
-  db.prepare("UPDATE character SET level = ?, xp = ? WHERE id = ?").run(
+  db.prepare("UPDATE character SET level = ?, xp = ?, gold = ? WHERE id = ?").run(
     level,
     xp,
+    gold,
     row.id,
   );
-  return { character: getCharacter(), leveledUp: level > before, gained: gain };
+  return { character: getCharacter(), leveledUp: level > before, gained: xpGain };
 }
 
 function toQuest(row) {
@@ -161,7 +172,7 @@ export function completeQuest(id) {
     new Date().toISOString(),
     id,
   );
-  const award = awardXp(row.xp);
+  const award = awardXp(row.xp, row.kind);
   const quest = toQuest(db.prepare("SELECT * FROM quest WHERE id = ?").get(id));
   return { quest, ...award };
 }

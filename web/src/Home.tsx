@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Avatar } from "./Avatar.tsx";
+import { CharacterSprite } from "./CharacterSprite.tsx";
 import { QuestSection } from "./QuestSection.tsx";
 import { xpToNext } from "./data.ts";
 import { addQuest, completeQuest, fetchQuests, removeQuest } from "./api.ts";
@@ -85,15 +85,22 @@ export function Home({
   const pct = Math.min(100, Math.round((character.xp / need) * 100));
 
   return (
-    <main className="screen" style={{ ["--accent" as string]: character.accent }}>
+    <main className="screen screen--with-nav" style={{ ["--accent" as string]: character.accent }}>
       <header className="herald">
         <p className="herald__kicker">attention!</p>
       </header>
 
       <section className="hero">
-        <Avatar sigil={character.sigil} accent={character.accent} size={104} />
+        <CharacterSprite sigil={character.sigil} accent={character.accent} sex={character.sex} hair={character.hair} size={100} />
         <h1 className="hero__name">{character.name}</h1>
         <p className="hero__level">Nível {character.level}</p>
+
+        <div className="gold-chip">
+          <svg viewBox="0 0 16 16" fill="currentColor" width="13" height="13">
+            <path d="M 8 2 L 14 8 L 8 14 L 2 8 Z" />
+          </svg>
+          <span>{character.gold ?? 0} ouro</span>
+        </div>
 
         <div className="xpbar" aria-label="Barra de experiência">
           <div className="xpbar__fill" style={{ width: `${pct}%` }} />
@@ -110,7 +117,7 @@ export function Home({
         <>
           <QuestSection
             title="Quests de hoje"
-            hint="Até 3 por dia. Verbo + objeto + um “pronto” claro."
+            hint={'Até 3 por dia. Verbo + objeto + um "pronto" claro.'}
             quests={daily}
             canAdd={daily.length < 3}
             fullMessage="As 3 quests de hoje estão definidas. Foco."

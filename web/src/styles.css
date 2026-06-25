@@ -185,6 +185,20 @@ body {
   background: var(--surface-2);
 }
 
+.chip--text {
+  width: auto;
+  height: auto;
+  padding: 10px 18px;
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.chip--text.chip--on {
+  color: var(--accent);
+}
+
 .swatch {
   width: 44px;
   height: 44px;
@@ -489,4 +503,207 @@ body {
 .ghost:hover {
   color: var(--text);
   border-color: var(--muted);
+}
+
+/* Telas com navbar fixa */
+.screen--with-nav {
+  padding-bottom: calc(72px + env(safe-area-inset-bottom) + 20px);
+}
+
+/* Navbar */
+.navbar {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 440px;
+  height: calc(64px + env(safe-area-inset-bottom));
+  padding-bottom: env(safe-area-inset-bottom);
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-around;
+  padding-top: 10px;
+  z-index: 100;
+}
+
+.navbar__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 0 14px;
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+
+.navbar__item--active {
+  color: var(--accent);
+}
+
+.navbar__icon {
+  display: block;
+  width: 22px;
+  height: 22px;
+}
+
+.navbar__icon svg {
+  width: 22px;
+  height: 22px;
+}
+
+.navbar__label {
+  font-family: var(--font-display);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+/* Ouro no hero */
+.gold-chip {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 12px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 600;
+  color: #d99a2b;
+  margin-bottom: 2px;
+}
+
+/* Casa */
+.casa-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 40px 24px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  text-align: center;
+}
+
+.casa-empty__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.casa-empty__hint {
+  margin: 0;
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+/* Loja */
+.gold-display {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 18px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 700;
+  color: #d99a2b;
+}
+
+.shop-placeholder {
+  padding: 40px 24px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  text-align: center;
+}
+
+.shop-placeholder__title {
+  margin: 0 0 8px;
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.shop-placeholder__hint {
+  margin: 0;
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+/* Taverna */
+.buff-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 18px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+}
+
+.buff-card--locked {
+  opacity: 0.55;
+}
+
+.buff-card__icon {
+  flex: none;
+  width: 50px;
+  height: 50px;
+  display: grid;
+  place-items: center;
+  background: var(--surface-2);
+  border-radius: 12px;
+  color: var(--accent);
+}
+
+.buff-card__info {
+  flex: 1;
+}
+
+.buff-card__name {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.buff-card__desc {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.35;
+}
+
+.buff-card__cost {
+  margin: 5px 0 0;
+  font-family: var(--font-display);
+  font-size: 12px;
+  color: #d99a2b;
+}
+
+.buff-card__badge {
+  flex: none;
+  padding: 4px 9px;
+  background: var(--surface-2);
+  border-radius: 8px;
+  font-size: 11px;
+  font-family: var(--font-display);
+  color: var(--muted);
+  letter-spacing: 0.04em;
+  white-space: nowrap;
 }

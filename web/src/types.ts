@@ -4,13 +4,20 @@ export type Character = {
   accent: string;
   level: number;
   xp: number;
+  gold: number;
+  sex: "M" | "F";
+  hair: string;
   createdAt: string;
 };
+
+export type Screen = "home" | "casa" | "loja" | "taverna";
 
 export type CharacterInput = {
   name: string;
   sigil: string;
   accent: string;
+  sex: "M" | "F";
+  hair: string;
 };
 
 export type QuestKind = "daily" | "avulsa";

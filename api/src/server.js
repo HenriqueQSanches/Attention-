@@ -53,6 +53,8 @@ const server = createServer(async (req, res) => {
       const name = String(body.name ?? "").trim();
       const sigil = String(body.sigil ?? "").trim();
       const accent = String(body.accent ?? "").trim();
+      const sex = body.sex === "F" ? "F" : "M";
+      const hair = String(body.hair ?? "").trim() || "curto";
 
       if (name.length < 2)
         return sendJson(res, 400, { error: "Nome precisa de ao menos 2 letras." });
@@ -61,7 +63,7 @@ const server = createServer(async (req, res) => {
       if (getCharacter())
         return sendJson(res, 409, { error: "Ja existe um heroi. Reset antes." });
 
-      return sendJson(res, 201, { character: createCharacter({ name, sigil, accent }) });
+      return sendJson(res, 201, { character: createCharacter({ name, sigil, accent, sex, hair }) });
     }
 
     if (path === "/api/character" && method === "DELETE") {
