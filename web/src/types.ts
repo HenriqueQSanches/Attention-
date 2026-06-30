@@ -6,18 +6,27 @@ export type Character = {
   xp: number;
   gold: number;
   sex: "M" | "F";
+  skin: string;
   hair: string;
+  hairColor: string;
+  torso: string | null;
+  legs: string | null;
+  feet: string | null;
+  ownedItems: string[];
   createdAt: string;
 };
 
 export type Screen = "home" | "casa" | "loja" | "taverna";
+export type ShopSlot = "torso" | "legs" | "feet";
 
 export type CharacterInput = {
   name: string;
   sigil: string;
   accent: string;
   sex: "M" | "F";
+  skin: string;
   hair: string;
+  hairColor: string;
 };
 
 export type QuestKind = "daily" | "avulsa";

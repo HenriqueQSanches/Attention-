@@ -1,12 +1,15 @@
 import { createServer } from "node:http";
 import {
+  buyItem,
   completeQuest,
   createCharacter,
   createQuest,
   deleteQuest,
+  equipItem,
   getCharacter,
   listQuests,
   resetCharacter,
+  unequipSlot,
 } from "./db.js";
 
 const PORT = 3333;
@@ -53,8 +56,10 @@ const server = createServer(async (req, res) => {
       const name = String(body.name ?? "").trim();
       const sigil = String(body.sigil ?? "").trim();
       const accent = String(body.accent ?? "").trim();
-      const sex = body.sex === "F" ? "F" : "M";
-      const hair = String(body.hair ?? "").trim() || "curto";
+      const sex       = body.sex === "F" ? "F" : "M";
+      const skin      = ["light","tanned","dark"].includes(body.skin) ? body.skin : "light";
+      const hair      = String(body.hair ?? "").trim() || "plain";
+      const hairColor = String(body.hairColor ?? "").trim() || "brown";
 
       if (name.length < 2)
         return sendJson(res, 400, { error: "Nome precisa de ao menos 2 letras." });
@@ -63,7 +68,7 @@ const server = createServer(async (req, res) => {
       if (getCharacter())
         return sendJson(res, 409, { error: "Ja existe um heroi. Reset antes." });
 
-      return sendJson(res, 201, { character: createCharacter({ name, sigil, accent, sex, hair }) });
+      return sendJson(res, 201, { character: createCharacter({ name, sigil, accent, sex, skin, hair, hairColor }) });
     }
 
     if (path === "/api/character" && method === "DELETE") {
@@ -93,6 +98,34 @@ const server = createServer(async (req, res) => {
     if (single && method === "DELETE") {
       deleteQuest(Number(single[1]));
       return sendJson(res, 200, { ok: true });
+    }
+
+    // ── Loja: comprar item ──────────────────────────────────────────────
+    if (path === "/api/shop/buy" && method === "POST") {
+      const body = await readJson(req);
+      const { itemId, price, itemPath } = body;
+      if (!itemId || price == null || !itemPath)
+        return sendJson(res, 400, { error: "itemId, price e itemPath sao obrigatorios." });
+      return sendJson(res, 200, { character: buyItem(itemId, price, itemPath) });
+    }
+
+    // ── Equipar / desequipar slot ───────────────────────────────────────
+    if (path === "/api/character/equip" && method === "POST") {
+      const body = await readJson(req);
+      const { itemPath, slot } = body;
+      const VALID_SLOTS = ["torso", "legs", "feet"];
+      if (!itemPath || !VALID_SLOTS.includes(slot))
+        return sendJson(res, 400, { error: "itemPath e slot valido sao obrigatorios." });
+      return sendJson(res, 200, { character: equipItem(itemPath, slot) });
+    }
+
+    if (path === "/api/character/unequip" && method === "POST") {
+      const body = await readJson(req);
+      const { slot } = body;
+      const VALID_SLOTS = ["torso", "legs", "feet"];
+      if (!VALID_SLOTS.includes(slot))
+        return sendJson(res, 400, { error: "Slot invalido." });
+      return sendJson(res, 200, { character: unequipSlot(slot) });
     }
 
     sendJson(res, 404, { error: "Rota nao encontrada." });

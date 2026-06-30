@@ -608,41 +608,146 @@ body {
 }
 
 /* Loja */
-.gold-display {
+.shop-hero {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 8px;
-  padding: 14px 18px;
+  gap: 10px;
+  padding: 20px;
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: 18px;
+}
+
+.shop-gold {
+  display: flex;
+  align-items: center;
+  gap: 5px;
   font-family: var(--font-display);
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 700;
   color: #d99a2b;
 }
 
-.shop-placeholder {
-  padding: 40px 24px;
+.shop-slots {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.shop-slot {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 18px;
+  border-radius: 10px;
+  font-size: 13px;
+}
+
+.shop-slot__label {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 12px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.shop-slot__empty {
+  font-size: 12px;
+  color: var(--border);
+  font-style: italic;
+}
+
+.shop-tabs {
+  display: flex;
+  gap: 8px;
+}
+
+.shop-msg {
+  font-size: 13px;
+  color: var(--accent);
+  margin: 0;
+}
+
+.shop-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.shop-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 14px 10px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  transition: border-color 0.15s ease;
+}
+
+.shop-card--equipped {
+  border-color: var(--accent);
+}
+
+.shop-card__sprite {
+  line-height: 0;
+}
+
+.shop-card__name {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 600;
   text-align: center;
 }
 
-.shop-placeholder__title {
-  margin: 0 0 8px;
-  font-family: var(--font-display);
-  font-size: 16px;
+.shop-card__tier {
+  margin: 0;
+  font-size: 11px;
   font-weight: 600;
-  color: var(--muted);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
 }
 
-.shop-placeholder__hint {
-  margin: 0;
-  font-size: 14px;
-  color: var(--muted);
-  line-height: 1.5;
+.shop-card__badge {
+  padding: 3px 10px;
+  background: color-mix(in srgb, var(--accent) 15%, transparent);
+  border-radius: 999px;
+  font-size: 11px;
+  font-family: var(--font-display);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.shop-card__btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 14px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--text);
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.15s ease;
+  color: #d99a2b;
+}
+
+.shop-card__btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.shop-card__btn:not(:disabled):hover {
+  border-color: #d99a2b;
 }
 
 /* Taverna */

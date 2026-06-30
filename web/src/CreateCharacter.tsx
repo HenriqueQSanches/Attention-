@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Avatar } from "./Avatar.tsx";
 import { CharacterSprite } from "./CharacterSprite.tsx";
-import { ACCENTS, SIGILS, hairsBySex } from "./data.ts";
+import { ACCENTS, HAIR_COLORS, SIGILS, SKIN_TONES, hairsBySex } from "./data.ts";
 import type { CharacterInput } from "./types.ts";
 
 type Props = {
@@ -15,7 +15,9 @@ export function CreateCharacter({ onCreate, busy, error }: Props) {
   const [sigil, setSigil] = useState(SIGILS[0].id);
   const [accent, setAccent] = useState(ACCENTS[0].hex);
   const [sex, setSex] = useState<"M" | "F">("M");
+  const [skin, setSkin] = useState(SKIN_TONES[0].id);
   const [hair, setHair] = useState(hairsBySex("M")[0].id);
+  const [hairColor, setHairColor] = useState(HAIR_COLORS[0].id);
 
   function handleSexChange(s: "M" | "F") {
     setSex(s);
@@ -30,13 +32,12 @@ export function CreateCharacter({ onCreate, busy, error }: Props) {
         <p className="herald__kicker">attention!</p>
         <h1 className="herald__title">Forje seu herói</h1>
         <p className="herald__sub">
-          A vida inteira mandaram você prestar atenção. Aqui, a palavra está do
-          seu lado.
+          A vida inteira mandaram você prestar atenção. Aqui, a palavra está do seu lado.
         </p>
       </header>
 
       <section className="preview" style={{ ["--accent" as string]: accent }}>
-        <CharacterSprite sigil={sigil} accent={accent} sex={sex} hair={hair} size={86} />
+        <CharacterSprite sex={sex} skin={skin} hair={hair} hairColor={hairColor} size={192} />
         <p className="preview__name">{name.trim() || "Sem nome"}</p>
         <p className="preview__level">Nível 1</p>
       </section>
@@ -72,6 +73,23 @@ export function CreateCharacter({ onCreate, busy, error }: Props) {
       </div>
 
       <div className="field">
+        <span className="field__label">Tom de pele</span>
+        <div className="picker">
+          {SKIN_TONES.map((t) => (
+            <button
+              key={t.id}
+              type="button"
+              className={`swatch${skin === t.id ? " swatch--on" : ""}`}
+              style={{ backgroundColor: t.hex }}
+              onClick={() => setSkin(t.id)}
+              aria-pressed={skin === t.id}
+              title={t.label}
+            />
+          ))}
+        </div>
+      </div>
+
+      <div className="field">
         <span className="field__label">Cabelo</span>
         <div className="picker">
           {hairsBySex(sex).map((h) => (
@@ -84,6 +102,23 @@ export function CreateCharacter({ onCreate, busy, error }: Props) {
             >
               {h.label}
             </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="field">
+        <span className="field__label">Cor do cabelo</span>
+        <div className="picker">
+          {HAIR_COLORS.map((c) => (
+            <button
+              key={c.id}
+              type="button"
+              className={`swatch${hairColor === c.id ? " swatch--on" : ""}`}
+              style={{ backgroundColor: c.hex }}
+              onClick={() => setHairColor(c.id)}
+              aria-pressed={hairColor === c.id}
+              title={c.label}
+            />
           ))}
         </div>
       </div>
@@ -130,7 +165,7 @@ export function CreateCharacter({ onCreate, busy, error }: Props) {
         type="button"
         disabled={!canStart}
         style={{ ["--accent" as string]: accent }}
-        onClick={() => onCreate({ name: name.trim(), sigil, accent, sex, hair })}
+        onClick={() => onCreate({ name: name.trim(), sigil, accent, sex, skin, hair, hairColor })}
       >
         {busy ? "Forjando..." : "Iniciar jornada"}
       </button>

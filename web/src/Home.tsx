@@ -91,7 +91,16 @@ export function Home({
       </header>
 
       <section className="hero">
-        <CharacterSprite sigil={character.sigil} accent={character.accent} sex={character.sex} hair={character.hair} size={100} />
+        <CharacterSprite
+          sex={character.sex}
+          skin={character.skin}
+          hair={character.hair}
+          hairColor={character.hairColor}
+          torso={character.torso ?? undefined}
+          legs={character.legs ?? undefined}
+          feet={character.feet ?? undefined}
+          size={128}
+        />
         <h1 className="hero__name">{character.name}</h1>
         <p className="hero__level">Nível {character.level}</p>
 

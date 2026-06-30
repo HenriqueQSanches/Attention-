@@ -60,3 +60,36 @@ export async function completeQuest(id: number): Promise<CompleteResult> {
 export async function removeQuest(id: number): Promise<void> {
   await parse(await fetch(`/api/quests/${id}`, { method: "DELETE" }));
 }
+
+export async function buyItem(itemId: string, price: number, itemPath: string): Promise<Character> {
+  const data = await parse(
+    await fetch("/api/shop/buy", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ itemId, price, itemPath }),
+    }),
+  );
+  return data.character;
+}
+
+export async function equipItem(itemPath: string, slot: string): Promise<Character> {
+  const data = await parse(
+    await fetch("/api/character/equip", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ itemPath, slot }),
+    }),
+  );
+  return data.character;
+}
+
+export async function unequipSlot(slot: string): Promise<Character> {
+  const data = await parse(
+    await fetch("/api/character/unequip", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ slot }),
+    }),
+  );
+  return data.character;
+}

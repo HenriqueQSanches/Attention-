@@ -71,7 +71,7 @@ export function App() {
         />
       )}
       {screen === "casa" && <Casa character={character} />}
-      {screen === "loja" && <Loja character={character} />}
+      {screen === "loja" && <Loja character={character} onCharacterUpdate={setCharacter} />}
       {screen === "taverna" && <Taverna character={character} />}
       <NavBar active={screen} onNavigate={setScreen} />
     </>

@@ -32,9 +32,15 @@ db.exec(`
   );
 `);
 
-try { db.exec("ALTER TABLE character ADD COLUMN gold INTEGER NOT NULL DEFAULT 0"); } catch (_) {}
-try { db.exec("ALTER TABLE character ADD COLUMN sex TEXT NOT NULL DEFAULT 'M'"); } catch (_) {}
-try { db.exec("ALTER TABLE character ADD COLUMN hair TEXT NOT NULL DEFAULT 'curto'"); } catch (_) {}
+try { db.exec("ALTER TABLE character ADD COLUMN gold       INTEGER NOT NULL DEFAULT 0");          } catch (_) {}
+try { db.exec("ALTER TABLE character ADD COLUMN sex        TEXT    NOT NULL DEFAULT 'M'");         } catch (_) {}
+try { db.exec("ALTER TABLE character ADD COLUMN skin       TEXT    NOT NULL DEFAULT 'light'");     } catch (_) {}
+try { db.exec("ALTER TABLE character ADD COLUMN hair       TEXT    NOT NULL DEFAULT 'plain'");     } catch (_) {}
+try { db.exec("ALTER TABLE character ADD COLUMN hair_color TEXT    NOT NULL DEFAULT 'brown'");     } catch (_) {}
+try { db.exec("ALTER TABLE character ADD COLUMN torso      TEXT");                                  } catch (_) {}
+try { db.exec("ALTER TABLE character ADD COLUMN legs       TEXT");                                  } catch (_) {}
+try { db.exec("ALTER TABLE character ADD COLUMN feet       TEXT");                                  } catch (_) {}
+try { db.exec("ALTER TABLE character ADD COLUMN owned_items TEXT   NOT NULL DEFAULT '[]'");        } catch (_) {}
 
 export const DAILY_XP = 25;
 export const AVULSA_XP = 60;
@@ -55,15 +61,21 @@ export function today() {
 function toCharacter(row) {
   if (!row) return null;
   return {
-    name: row.name,
-    sigil: row.sigil,
-    accent: row.accent,
-    level: row.level,
-    xp: row.xp,
-    gold: row.gold ?? 0,
-    sex: row.sex ?? "M",
-    hair: row.hair ?? "curto",
-    createdAt: row.created_at,
+    name:       row.name,
+    sigil:      row.sigil,
+    accent:     row.accent,
+    level:      row.level,
+    xp:         row.xp,
+    gold:       row.gold ?? 0,
+    sex:        row.sex ?? "M",
+    skin:       row.skin ?? "light",
+    hair:       row.hair ?? "plain",
+    hairColor:  row.hair_color ?? "brown",
+    torso:      row.torso ?? null,
+    legs:       row.legs ?? null,
+    feet:       row.feet ?? null,
+    ownedItems: JSON.parse(row.owned_items ?? "[]"),
+    createdAt:  row.created_at,
   };
 }
 
@@ -75,10 +87,43 @@ export function getCharacter() {
   return toCharacter(characterRow());
 }
 
-export function createCharacter({ name, sigil, accent, sex, hair }) {
+export function createCharacter({ name, sigil, accent, sex, skin, hair, hairColor }) {
   db.prepare(
-    "INSERT INTO character (name, sigil, accent, level, xp, gold, sex, hair, created_at) VALUES (?, ?, ?, 1, 0, 0, ?, ?, ?)",
-  ).run(name, sigil, accent, sex ?? "M", hair ?? "curto", new Date().toISOString());
+    `INSERT INTO character
+       (name, sigil, accent, level, xp, gold, sex, skin, hair, hair_color, created_at)
+     VALUES (?, ?, ?, 1, 0, 0, ?, ?, ?, ?, ?)`,
+  ).run(name, sigil, accent, sex ?? "M", skin ?? "light", hair ?? "plain", hairColor ?? "brown", new Date().toISOString());
+  return getCharacter();
+}
+
+export function equipItem(itemPath, slot) {
+  const row = characterRow();
+  if (!row) throw Object.assign(new Error("Personagem nao encontrado."), { status: 404 });
+  const ownedItems = JSON.parse(row.owned_items ?? "[]");
+  if (!ownedItems.includes(itemPath)) {
+    throw Object.assign(new Error("Item nao desbloqueado."), { status: 403 });
+  }
+  db.prepare(`UPDATE character SET ${slot} = ? WHERE id = ?`).run(itemPath, row.id);
+  return getCharacter();
+}
+
+export function unequipSlot(slot) {
+  const row = characterRow();
+  if (!row) throw Object.assign(new Error("Personagem nao encontrado."), { status: 404 });
+  db.prepare(`UPDATE character SET ${slot} = NULL WHERE id = ?`).run(row.id);
+  return getCharacter();
+}
+
+export function buyItem(itemId, price, itemPath) {
+  const row = characterRow();
+  if (!row) throw Object.assign(new Error("Personagem nao encontrado."), { status: 404 });
+  const gold = row.gold ?? 0;
+  if (gold < price) throw Object.assign(new Error("Ouro insuficiente."), { status: 402 });
+  const owned = JSON.parse(row.owned_items ?? "[]");
+  if (owned.includes(itemId)) throw Object.assign(new Error("Item ja comprado."), { status: 409 });
+  owned.push(itemId);
+  db.prepare("UPDATE character SET gold = ?, owned_items = ? WHERE id = ?")
+    .run(gold - price, JSON.stringify(owned), row.id);
   return getCharacter();
 }
 
