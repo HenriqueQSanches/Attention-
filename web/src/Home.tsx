@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
+import { BrandHeader } from "./BrandHeader.tsx";
 import { CharacterSprite } from "./CharacterSprite.tsx";
 import { QuestSection } from "./QuestSection.tsx";
+import { QuestForge } from "./QuestForge.tsx";
 import { xpToNext } from "./data.ts";
 import { addQuest, completeQuest, fetchQuests, removeQuest } from "./api.ts";
 import type { Character, Quest, QuestKind } from "./types.ts";
@@ -86,9 +88,7 @@ export function Home({
 
   return (
     <main className="screen screen--with-nav" style={{ ["--accent" as string]: character.accent }}>
-      <header className="herald">
-        <p className="herald__kicker">attention!</p>
-      </header>
+      <BrandHeader sub="A vida inteira essa palavra veio como bronca. Aqui, pela primeira vez, ela está do seu lado." />
 
       <section className="hero">
         <CharacterSprite
@@ -124,6 +124,13 @@ export function Home({
         <p className="loading">Carregando quests...</p>
       ) : (
         <>
+          <QuestForge
+            pet={character.pet}
+            dailyFull={daily.length >= 3}
+            busy={working}
+            onAdd={add}
+          />
+
           <QuestSection
             title="Quests de hoje"
             hint={'Até 3 por dia. Verbo + objeto + um "pronto" claro.'}

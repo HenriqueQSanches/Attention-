@@ -1,16 +1,19 @@
 import { createServer } from "node:http";
 import {
   buyItem,
+  buyPet,
   completeQuest,
   createCharacter,
   createQuest,
   deleteQuest,
   equipItem,
+  equipPet,
   getCharacter,
   listQuests,
   resetCharacter,
   unequipSlot,
 } from "./db.js";
+import { suggestQuests } from "./ai.js";
 
 const PORT = 3333;
 
@@ -60,6 +63,9 @@ const server = createServer(async (req, res) => {
       const skin      = ["light","tanned","dark"].includes(body.skin) ? body.skin : "light";
       const hair      = String(body.hair ?? "").trim() || "plain";
       const hairColor = String(body.hairColor ?? "").trim() || "brown";
+      const torso     = body.torso ? String(body.torso).trim() : null;
+      const legs      = body.legs ? String(body.legs).trim() : null;
+      const feet      = body.feet ? String(body.feet).trim() : null;
 
       if (name.length < 2)
         return sendJson(res, 400, { error: "Nome precisa de ao menos 2 letras." });
@@ -68,7 +74,7 @@ const server = createServer(async (req, res) => {
       if (getCharacter())
         return sendJson(res, 409, { error: "Ja existe um heroi. Reset antes." });
 
-      return sendJson(res, 201, { character: createCharacter({ name, sigil, accent, sex, skin, hair, hairColor }) });
+      return sendJson(res, 201, { character: createCharacter({ name, sigil, accent, sex, skin, hair, hairColor, torso, legs, feet }) });
     }
 
     if (path === "/api/character" && method === "DELETE") {
@@ -87,6 +93,14 @@ const server = createServer(async (req, res) => {
       if (title.length < 3)
         return sendJson(res, 400, { error: "Descreva a quest (min. 3 letras)." });
       return sendJson(res, 201, { quest: createQuest({ title, kind }) });
+    }
+
+    if (path === "/api/quests/suggest" && method === "POST") {
+      const body = await readJson(req);
+      const text = String(body.text ?? "").trim();
+      if (text.length < 4)
+        return sendJson(res, 400, { error: "Descreva a tarefa (min. 4 letras)." });
+      return sendJson(res, 200, { suggestions: await suggestQuests(text) });
     }
 
     const complete = path.match(/^\/api\/quests\/(\d+)\/complete$/);
@@ -126,6 +140,24 @@ const server = createServer(async (req, res) => {
       if (!VALID_SLOTS.includes(slot))
         return sendJson(res, 400, { error: "Slot invalido." });
       return sendJson(res, 200, { character: unequipSlot(slot) });
+    }
+
+    // ── Pets: adotar / equipar ──────────────────────────────────────────
+    if (path === "/api/pets/buy" && method === "POST") {
+      const body = await readJson(req);
+      const petId = String(body.petId ?? "").trim();
+      const price = Number(body.price);
+      if (!petId || !Number.isFinite(price) || price < 0)
+        return sendJson(res, 400, { error: "petId e price validos sao obrigatorios." });
+      return sendJson(res, 200, { character: buyPet(petId, price) });
+    }
+
+    if (path === "/api/pets/equip" && method === "POST") {
+      const body = await readJson(req);
+      const petId = String(body.petId ?? "").trim();
+      if (!petId)
+        return sendJson(res, 400, { error: "petId e obrigatorio." });
+      return sendJson(res, 200, { character: equipPet(petId) });
     }
 
     sendJson(res, 404, { error: "Rota nao encontrada." });

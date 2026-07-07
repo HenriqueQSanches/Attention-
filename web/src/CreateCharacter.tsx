@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Avatar } from "./Avatar.tsx";
+import { BrandHeader } from "./BrandHeader.tsx";
 import { CharacterSprite } from "./CharacterSprite.tsx";
-import { ACCENTS, HAIR_COLORS, SIGILS, SKIN_TONES, hairsBySex } from "./data.ts";
+import { ACCENTS, HAIR_COLORS, SIGILS, SKIN_TONES, STARTER_OUTFITS, hairsBySex } from "./data.ts";
 import type { CharacterInput } from "./types.ts";
 
 type Props = {
@@ -18,26 +19,37 @@ export function CreateCharacter({ onCreate, busy, error }: Props) {
   const [skin, setSkin] = useState(SKIN_TONES[0].id);
   const [hair, setHair] = useState(hairsBySex("M")[0].id);
   const [hairColor, setHairColor] = useState(HAIR_COLORS[0].id);
+  const [outfitId, setOutfitId] = useState(STARTER_OUTFITS.M[0].id);
+
+  const outfits = STARTER_OUTFITS[sex];
+  const outfit = outfits.find((o) => o.id === outfitId) ?? outfits[0];
 
   function handleSexChange(s: "M" | "F") {
     setSex(s);
     setHair(hairsBySex(s)[0].id);
+    setOutfitId(STARTER_OUTFITS[s][0].id);
   }
 
   const canStart = name.trim().length >= 2 && !busy;
 
   return (
     <main className="screen">
-      <header className="herald">
-        <p className="herald__kicker">attention!</p>
-        <h1 className="herald__title">Forje seu herói</h1>
-        <p className="herald__sub">
-          A vida inteira mandaram você prestar atenção. Aqui, a palavra está do seu lado.
-        </p>
-      </header>
+      <BrandHeader
+        title="Forje seu herói"
+        sub="A vida inteira mandaram você prestar atenção. Aqui, a palavra está do seu lado."
+      />
 
       <section className="preview" style={{ ["--accent" as string]: accent }}>
-        <CharacterSprite sex={sex} skin={skin} hair={hair} hairColor={hairColor} size={192} />
+        <CharacterSprite
+          sex={sex}
+          skin={skin}
+          hair={hair}
+          hairColor={hairColor}
+          torso={outfit.torso ?? undefined}
+          legs={outfit.legs ?? undefined}
+          feet={outfit.feet ?? undefined}
+          size={192}
+        />
         <p className="preview__name">{name.trim() || "Sem nome"}</p>
         <p className="preview__level">Nível 1</p>
       </section>
@@ -124,7 +136,24 @@ export function CreateCharacter({ onCreate, busy, error }: Props) {
       </div>
 
       <div className="field">
-        <span className="field__label">Sigilo</span>
+        <span className="field__label">Roupa inicial</span>
+        <div className="picker">
+          {outfits.map((o) => (
+            <button
+              key={o.id}
+              type="button"
+              className={`chip chip--text${outfitId === o.id ? " chip--on" : ""}`}
+              onClick={() => setOutfitId(o.id)}
+              aria-pressed={outfitId === o.id}
+            >
+              {o.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="field">
+        <span className="field__label">Elemento</span>
         <div className="picker">
           {SIGILS.map((s) => (
             <button
@@ -165,7 +194,20 @@ export function CreateCharacter({ onCreate, busy, error }: Props) {
         type="button"
         disabled={!canStart}
         style={{ ["--accent" as string]: accent }}
-        onClick={() => onCreate({ name: name.trim(), sigil, accent, sex, skin, hair, hairColor })}
+        onClick={() =>
+          onCreate({
+            name: name.trim(),
+            sigil,
+            accent,
+            sex,
+            skin,
+            hair,
+            hairColor,
+            torso: outfit.torso,
+            legs: outfit.legs,
+            feet: outfit.feet,
+          })
+        }
       >
         {busy ? "Forjando..." : "Iniciar jornada"}
       </button>

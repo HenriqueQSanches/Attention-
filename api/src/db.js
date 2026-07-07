@@ -41,6 +41,8 @@ try { db.exec("ALTER TABLE character ADD COLUMN torso      TEXT");              
 try { db.exec("ALTER TABLE character ADD COLUMN legs       TEXT");                                  } catch (_) {}
 try { db.exec("ALTER TABLE character ADD COLUMN feet       TEXT");                                  } catch (_) {}
 try { db.exec("ALTER TABLE character ADD COLUMN owned_items TEXT   NOT NULL DEFAULT '[]'");        } catch (_) {}
+try { db.exec("ALTER TABLE character ADD COLUMN pet        TEXT    NOT NULL DEFAULT 'bolt'");      } catch (_) {}
+try { db.exec("ALTER TABLE character ADD COLUMN owned_pets TEXT    NOT NULL DEFAULT '[\"bolt\"]'"); } catch (_) {}
 
 export const DAILY_XP = 25;
 export const AVULSA_XP = 60;
@@ -75,6 +77,8 @@ function toCharacter(row) {
     legs:       row.legs ?? null,
     feet:       row.feet ?? null,
     ownedItems: JSON.parse(row.owned_items ?? "[]"),
+    pet:        row.pet ?? "bolt",
+    ownedPets:  JSON.parse(row.owned_pets ?? '["bolt"]'),
     createdAt:  row.created_at,
   };
 }
@@ -87,12 +91,16 @@ export function getCharacter() {
   return toCharacter(characterRow());
 }
 
-export function createCharacter({ name, sigil, accent, sex, skin, hair, hairColor }) {
+export function createCharacter({ name, sigil, accent, sex, skin, hair, hairColor, torso, legs, feet }) {
+  const owned = [torso, legs, feet].filter(Boolean);
   db.prepare(
     `INSERT INTO character
-       (name, sigil, accent, level, xp, gold, sex, skin, hair, hair_color, created_at)
-     VALUES (?, ?, ?, 1, 0, 0, ?, ?, ?, ?, ?)`,
-  ).run(name, sigil, accent, sex ?? "M", skin ?? "light", hair ?? "plain", hairColor ?? "brown", new Date().toISOString());
+       (name, sigil, accent, level, xp, gold, sex, skin, hair, hair_color, torso, legs, feet, owned_items, created_at)
+     VALUES (?, ?, ?, 1, 0, 0, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+  ).run(
+    name, sigil, accent, sex ?? "M", skin ?? "light", hair ?? "plain", hairColor ?? "brown",
+    torso ?? null, legs ?? null, feet ?? null, JSON.stringify(owned), new Date().toISOString(),
+  );
   return getCharacter();
 }
 
@@ -120,10 +128,32 @@ export function buyItem(itemId, price, itemPath) {
   const gold = row.gold ?? 0;
   if (gold < price) throw Object.assign(new Error("Ouro insuficiente."), { status: 402 });
   const owned = JSON.parse(row.owned_items ?? "[]");
-  if (owned.includes(itemId)) throw Object.assign(new Error("Item ja comprado."), { status: 409 });
-  owned.push(itemId);
+  if (owned.includes(itemPath)) throw Object.assign(new Error("Item ja comprado."), { status: 409 });
+  owned.push(itemPath);
   db.prepare("UPDATE character SET gold = ?, owned_items = ? WHERE id = ?")
     .run(gold - price, JSON.stringify(owned), row.id);
+  return getCharacter();
+}
+
+export function buyPet(petId, price) {
+  const row = characterRow();
+  if (!row) throw Object.assign(new Error("Personagem nao encontrado."), { status: 404 });
+  const gold = row.gold ?? 0;
+  if (gold < price) throw Object.assign(new Error("Ouro insuficiente."), { status: 402 });
+  const owned = JSON.parse(row.owned_pets ?? '["bolt"]');
+  if (owned.includes(petId)) throw Object.assign(new Error("Pet ja adotado."), { status: 409 });
+  owned.push(petId);
+  db.prepare("UPDATE character SET gold = ?, owned_pets = ? WHERE id = ?")
+    .run(gold - price, JSON.stringify(owned), row.id);
+  return getCharacter();
+}
+
+export function equipPet(petId) {
+  const row = characterRow();
+  if (!row) throw Object.assign(new Error("Personagem nao encontrado."), { status: 404 });
+  const owned = JSON.parse(row.owned_pets ?? '["bolt"]');
+  if (!owned.includes(petId)) throw Object.assign(new Error("Pet nao adotado."), { status: 403 });
+  db.prepare("UPDATE character SET pet = ? WHERE id = ?").run(petId, row.id);
   return getCharacter();
 }
 

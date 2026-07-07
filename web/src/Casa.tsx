@@ -1,3 +1,4 @@
+import { BrandHeader } from "./BrandHeader.tsx";
 import { CharacterSprite } from "./CharacterSprite.tsx";
 import type { Character } from "./types.ts";
 
@@ -11,10 +12,7 @@ export function Casa({ character }: Props) {
       className="screen screen--with-nav"
       style={{ ["--accent" as string]: character.accent }}
     >
-      <header className="herald">
-        <p className="herald__kicker">attention!</p>
-        <h1 className="herald__title">Casa do Herói</h1>
-      </header>
+      <BrandHeader title="Casa do Herói" />
 
       <section className="casa-empty">
         <CharacterSprite sigil={character.sigil} accent={character.accent} size={90} />

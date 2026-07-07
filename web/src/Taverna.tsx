@@ -1,3 +1,4 @@
+import { BrandHeader } from "./BrandHeader.tsx";
 import type { Character } from "./types.ts";
 
 type Props = {
@@ -10,11 +11,7 @@ export function Taverna({ character }: Props) {
       className="screen screen--with-nav"
       style={{ ["--accent" as string]: character.accent }}
     >
-      <header className="herald">
-        <p className="herald__kicker">attention!</p>
-        <h1 className="herald__title">Taverna</h1>
-        <p className="herald__sub">Descanse, recarregue e escolha seus buffs.</p>
-      </header>
+      <BrandHeader title="Taverna" sub="Descanse, recarregue e escolha seus buffs." />
 
       <section className="buff-card buff-card--locked">
         <div className="buff-card__icon">

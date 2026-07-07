@@ -5,6 +5,11 @@ dist/
 .DS_Store
 .claude/
 
+# Segredos
+.env
+.env.*
+!.env.example
+
 # SQLite
 api/data/*.db
 api/data/*.db-*

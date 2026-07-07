@@ -51,6 +51,17 @@ export async function addQuest(input: {
   return data.quest;
 }
 
+export async function suggestQuests(text: string): Promise<string[]> {
+  const data = await parse(
+    await fetch("/api/quests/suggest", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text }),
+    }),
+  );
+  return data.suggestions ?? [];
+}
+
 export async function completeQuest(id: number): Promise<CompleteResult> {
   return parse(
     await fetch(`/api/quests/${id}/complete`, { method: "POST" }),
@@ -89,6 +100,28 @@ export async function unequipSlot(slot: string): Promise<Character> {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ slot }),
+    }),
+  );
+  return data.character;
+}
+
+export async function buyPet(petId: string, price: number): Promise<Character> {
+  const data = await parse(
+    await fetch("/api/pets/buy", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ petId, price }),
+    }),
+  );
+  return data.character;
+}
+
+export async function equipPet(petId: string): Promise<Character> {
+  const data = await parse(
+    await fetch("/api/pets/equip", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ petId }),
     }),
   );
   return data.character;

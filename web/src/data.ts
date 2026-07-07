@@ -70,19 +70,30 @@ export type HairStyle = { id: string; label: string };
 export type HairColor = { id: string; label: string; hex: string };
 
 export const MALE_HAIRS: HairStyle[] = [
-  { id: "plain",  label: "Liso"     },
-  { id: "bangs",  label: "Franja"   },
-  { id: "messy1", label: "Bagunçado"},
-  { id: "long",   label: "Longo"    },
-  { id: "mohawk", label: "Moicano"  },
+  { id: "plain",  label: "Liso"       },
+  { id: "bangs",  label: "Franja"     },
+  { id: "messy1", label: "Bagunçado"  },
+  { id: "messy2", label: "Bagunçado 2"},
+  { id: "long",   label: "Longo"      },
+  { id: "mohawk", label: "Moicano"    },
+  { id: "spiked", label: "Espetado"   },
+  { id: "bedhead",label: "Despenteado"},
+  { id: "swoop",  label: "Topete"     },
+  { id: "mop",    label: "Cabeludo"   },
 ];
 
 export const FEMALE_HAIRS: HairStyle[] = [
-  { id: "plain",    label: "Liso"     },
-  { id: "bangs",    label: "Franja"   },
-  { id: "messy1",   label: "Bagunçado"},
-  { id: "long",     label: "Longo"    },
-  { id: "ponytail", label: "Rabo"     },
+  { id: "plain",         label: "Liso"      },
+  { id: "bangs",         label: "Franja"    },
+  { id: "messy1",        label: "Bagunçado" },
+  { id: "long",          label: "Longo"     },
+  { id: "ponytail",      label: "Rabo"      },
+  { id: "braid",         label: "Trança"    },
+  { id: "curly_long",    label: "Cachos"    },
+  { id: "wavy",          label: "Ondulado"  },
+  { id: "pigtails",      label: "Chiquinhas"},
+  { id: "high_ponytail", label: "Rabo Alto" },
+  { id: "princess",      label: "Princesa"  },
 ];
 
 export const HAIR_COLORS: HairColor[] = [
@@ -153,10 +164,94 @@ export const SHOP_ITEMS: ShopItem[] = [
   // ── feet
   { id: "shoes_black", label: "Botas Pretas",  slot: "feet", price: 60,  path: "feet/shoes/male/black.png", sexes: ["M", "F"], tier: "common" },
   { id: "shoes_brown", label: "Botas Marrons", slot: "feet", price: 60,  path: "feet/shoes/male/brown.png", sexes: ["M", "F"], tier: "common" },
+
+  // ── Feminino: vestidos, blusas, calças, sapatos
+  { id: "fdb_teal",   label: "Vestido Verde-água",      slot: "torso", price: 190, path: "torso/dress_bodice/female/teal.png",   sexes: ["F"], tier: "rare"   },
+  { id: "fdb_purple", label: "Vestido Roxo",            slot: "torso", price: 190, path: "torso/dress_bodice/female/purple.png", sexes: ["F"], tier: "rare"   },
+  { id: "fdb_rose",   label: "Vestido Rosé",            slot: "torso", price: 190, path: "torso/dress_bodice/female/rose.png",   sexes: ["F"], tier: "rare"   },
+  { id: "fdb_navy",   label: "Vestido Marinho",         slot: "torso", price: 190, path: "torso/dress_bodice/female/navy.png",   sexes: ["F"], tier: "rare"   },
+  { id: "fds_red",    label: "Vestido Fenda Vermelho",  slot: "torso", price: 280, path: "torso/dress_slit/female/red.png",      sexes: ["F"], tier: "epic"   },
+  { id: "fds_forest", label: "Vestido Fenda Musgo",     slot: "torso", price: 280, path: "torso/dress_slit/female/forest.png",   sexes: ["F"], tier: "epic"   },
+  { id: "fbl_white",  label: "Blusa Branca",            slot: "torso", price: 80,  path: "torso/blouse/female/white.png",        sexes: ["F"], tier: "common" },
+  { id: "fbl_teal",   label: "Blusa Verde-água",        slot: "torso", price: 80,  path: "torso/blouse/female/teal.png",         sexes: ["F"], tier: "common" },
+  { id: "fbl_rose",   label: "Blusa Rosé",              slot: "torso", price: 80,  path: "torso/blouse/female/rose.png",         sexes: ["F"], tier: "common" },
+  { id: "fbl_maroon", label: "Blusa Vinho",             slot: "torso", price: 80,  path: "torso/blouse/female/maroon.png",       sexes: ["F"], tier: "common" },
+  { id: "fbl_navy",   label: "Blusa Marinho",           slot: "torso", price: 80,  path: "torso/blouse/female/navy.png",         sexes: ["F"], tier: "common" },
+  { id: "fpa_black",  label: "Calça Preta",             slot: "legs",  price: 70,  path: "legs/pants/female/black.png",          sexes: ["F"], tier: "common" },
+  { id: "fpa_navy",   label: "Calça Marinho",           slot: "legs",  price: 70,  path: "legs/pants/female/navy.png",           sexes: ["F"], tier: "common" },
+  { id: "fpa_maroon", label: "Calça Vinho",             slot: "legs",  price: 70,  path: "legs/pants/female/maroon.png",         sexes: ["F"], tier: "common" },
+  { id: "fpa_teal",   label: "Calça Verde-água",        slot: "legs",  price: 70,  path: "legs/pants/female/teal.png",           sexes: ["F"], tier: "common" },
+  { id: "fsh_black",  label: "Sapatos Pretos",          slot: "feet",  price: 60,  path: "feet/shoes/female/black.png",          sexes: ["F"], tier: "common" },
+  { id: "fsh_brown",  label: "Sapatos Marrons",         slot: "feet",  price: 60,  path: "feet/shoes/female/brown.png",          sexes: ["F"], tier: "common" },
+  { id: "fsh_red",    label: "Sapatos Vermelhos",       slot: "feet",  price: 60,  path: "feet/shoes/female/red.png",            sexes: ["F"], tier: "common" },
+  { id: "fsh_white",  label: "Sapatos Brancos",         slot: "feet",  price: 60,  path: "feet/shoes/female/white.png",          sexes: ["F"], tier: "common" },
+
+  // ── Masculino: camisas, coletes, calças, sapatos
+  { id: "mls_white",    label: "Camisa Branca",   slot: "torso", price: 80,  path: "torso/longsleeve/male/white.png",    sexes: ["M"], tier: "common" },
+  { id: "mls_navy",     label: "Camisa Marinho",  slot: "torso", price: 80,  path: "torso/longsleeve/male/navy.png",     sexes: ["M"], tier: "common" },
+  { id: "mls_forest",   label: "Camisa Musgo",    slot: "torso", price: 80,  path: "torso/longsleeve/male/forest.png",   sexes: ["M"], tier: "common" },
+  { id: "mls_charcoal", label: "Camisa Grafite",  slot: "torso", price: 80,  path: "torso/longsleeve/male/charcoal.png", sexes: ["M"], tier: "common" },
+  { id: "mls_maroon",   label: "Camisa Vinho",    slot: "torso", price: 80,  path: "torso/longsleeve/male/maroon.png",   sexes: ["M"], tier: "common" },
+  { id: "mvs_black",    label: "Colete Preto",    slot: "torso", price: 160, path: "torso/vest/male/black.png",          sexes: ["M"], tier: "rare"   },
+  { id: "mvs_brown",    label: "Colete Marrom",   slot: "torso", price: 160, path: "torso/vest/male/brown.png",          sexes: ["M"], tier: "rare"   },
+  { id: "mpa_black",    label: "Calça Preta",     slot: "legs",  price: 70,  path: "legs/pants/male/black.png",           sexes: ["M"], tier: "common" },
+  { id: "mpa_brown",    label: "Calça Marrom",    slot: "legs",  price: 70,  path: "legs/pants/male/brown.png",           sexes: ["M"], tier: "common" },
+  { id: "mpa_navy",     label: "Calça Marinho",   slot: "legs",  price: 70,  path: "legs/pants/male/navy.png",            sexes: ["M"], tier: "common" },
+  { id: "mpa_forest",   label: "Calça Musgo",     slot: "legs",  price: 70,  path: "legs/pants/male/forest.png",          sexes: ["M"], tier: "common" },
+  { id: "mfe_navy",     label: "Sapatos Marinho", slot: "feet",  price: 60,  path: "feet/shoes/male/navy.png",            sexes: ["M"], tier: "common" },
+  { id: "mfe_red",      label: "Sapatos Vermelhos",slot: "feet", price: 60,  path: "feet/shoes/male/red.png",             sexes: ["M"], tier: "common" },
+  { id: "mfe_white",    label: "Sapatos Brancos", slot: "feet",  price: 60,  path: "feet/shoes/male/white.png",           sexes: ["M"], tier: "common" },
 ];
+
+// ── Roupa inicial na criação (o herói/heroína nasce vestido) ─────────────
+export type Outfit = {
+  id: string;
+  label: string;
+  torso: string | null;
+  legs: string | null;
+  feet: string | null;
+};
+
+export const STARTER_OUTFITS: Record<"M" | "F", Outfit[]> = {
+  M: [
+    { id: "m_casual",   label: "Casual",   torso: "torso/longsleeve/male/white.png", legs: "legs/pants/male/black.png",  feet: "feet/shoes/male/black.png" },
+    { id: "m_classico", label: "Clássico", torso: "torso/longsleeve/male/navy.png",  legs: "legs/pants/male/brown.png",  feet: "feet/shoes/male/brown.png" },
+    { id: "m_aventura", label: "Aventura", torso: "torso/longsleeve/male/forest.png", legs: "legs/pants/male/forest.png", feet: "feet/shoes/male/navy.png"  },
+  ],
+  F: [
+    { id: "f_casual",  label: "Casual",  torso: "torso/blouse/female/white.png",      legs: "legs/pants/female/black.png",  feet: "feet/shoes/female/black.png" },
+    { id: "f_vestido", label: "Vestido", torso: "torso/dress_bodice/female/teal.png", legs: null,                           feet: "feet/shoes/female/black.png" },
+    { id: "f_rose",    label: "Rosé",    torso: "torso/blouse/female/rose.png",       legs: "legs/pants/female/maroon.png", feet: "feet/shoes/female/red.png"   },
+  ],
+};
 
 export const TIER_LABEL: Record<string, string> = {
   common: "Comum",
   rare:   "Raro",
   epic:   "Épico",
 };
+
+// ── Pets (mascote da IA que destrincha tarefas) ──────────────────────────
+export type Pet = {
+  id: string;
+  name: string;
+  seed: string;   // semente do DiceBear (estilo bottts)
+  price: number;  // 0 = inicial, já vem adotado
+  tier: "common" | "rare" | "epic";
+  line: string;   // fala do mascote na forja de quests
+  opts?: Record<string, unknown>; // opções fixas do DiceBear (traços do rosto/cor)
+};
+
+export const PETS: Pet[] = [
+  { id: "bolt",  name: "Iris",  seed: "iris-aurora",        price: 0,   tier: "common", line: "Sou a Iris, tua parceira de sempre. Manda a missão grande que eu divido em passos possíveis.", opts: { baseColor: ["a78bfa"], eyes: ["happy"], mouth: ["smile01"], face: ["round01"] } },
+  { id: "pip",   name: "Pip",   seed: "pip-spark-77",       price: 120, tier: "common", line: "Pip na área! Solta a tarefa cabeluda que eu pico ela pra você." },
+  { id: "sil",   name: "Sil",   seed: "sil-circuit-42",     price: 120, tier: "common", line: "Aqui é a Sil. Me diz o bicho de sete cabeças e eu devolvo em pedacinhos." },
+  { id: "gizmo", name: "Gizmo", seed: "gizmo-gear-13",      price: 260, tier: "rare",   line: "Gizmo pronto. Toda missão vira lista curta comigo no comando." },
+  { id: "rue",   name: "Rue",   seed: "rue-signal-88",      price: 260, tier: "rare",   line: "Rue reportando. Nenhuma tarefa é grande demais depois que eu fatio." },
+  { id: "vega",  name: "Vega",  seed: "vega-nova-09",       price: 550, tier: "epic",   line: "Sou a Vega. Traz o caos que eu organizo em passos limpos." },
+  { id: "titan", name: "Titan", seed: "titan-core-01",      price: 550, tier: "epic",   line: "Titan em campo. Missões colossais são a minha especialidade." },
+];
+
+export function petById(id: string): Pet {
+  return PETS.find((p) => p.id === id) ?? PETS[0];
+}

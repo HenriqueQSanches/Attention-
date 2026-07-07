@@ -1,0 +1,25 @@
+<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Attention!">
+  <defs>
+    <radialGradient id="iris" cx="50%" cy="56%" r="62%">
+      <stop offset="0%" stop-color="#c4b5fd" />
+      <stop offset="55%" stop-color="#8b5cf6" />
+      <stop offset="100%" stop-color="#4f46e5" />
+    </radialGradient>
+    <clipPath id="eye">
+      <path d="M6 32 Q32 12 58 32 Q32 52 6 32 Z" />
+    </clipPath>
+  </defs>
+
+  <path d="M6 32 Q32 12 58 32 Q32 52 6 32 Z" fill="#0e1116" />
+
+  <g clip-path="url(#eye)">
+    <circle cx="32" cy="32" r="15" fill="url(#iris)" />
+    <circle cx="32" cy="32" r="15" fill="none" stroke="#c4b5fd" stroke-opacity="0.55" stroke-width="1.5" />
+    <circle cx="32" cy="32" r="10.5" fill="none" stroke="#0e1116" stroke-opacity="0.35" stroke-width="1.5" />
+  </g>
+
+  <circle cx="32" cy="32" r="4.6" fill="#0b0e13" />
+  <circle cx="30.2" cy="30.2" r="1.5" fill="#ffffff" />
+
+  <path d="M6 32 Q32 12 58 32 Q32 52 6 32 Z" fill="none" stroke="#e6edf3" stroke-opacity="0.9" stroke-width="2" stroke-linejoin="round" />
+</svg>

@@ -13,6 +13,8 @@ export type Character = {
   legs: string | null;
   feet: string | null;
   ownedItems: string[];
+  pet: string;
+  ownedPets: string[];
   createdAt: string;
 };
 
@@ -27,6 +29,9 @@ export type CharacterInput = {
   skin: string;
   hair: string;
   hairColor: string;
+  torso: string | null;
+  legs: string | null;
+  feet: string | null;
 };
 
 export type QuestKind = "daily" | "avulsa";

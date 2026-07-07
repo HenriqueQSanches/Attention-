@@ -86,6 +86,44 @@ body {
   letter-spacing: -0.01em;
 }
 
+/* Marca: logo + wordmark "Attention!" + tagline */
+.brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 10px;
+}
+
+.brand__lockup {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.brand__logo {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+
+.brand__word {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  color: var(--accent);
+}
+
+.brand__tagline {
+  margin: 0;
+  max-width: 320px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
 .herald__sub {
   margin: 10px 0 0;
   color: var(--muted);
@@ -488,6 +526,269 @@ body {
   cursor: not-allowed;
 }
 
+/* Destrinchar tarefa em quests */
+.forge__mascot {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.forge__mascot img {
+  flex: none;
+  border-radius: 16px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+}
+
+.forge__bubble {
+  flex: 1;
+  position: relative;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 10px 12px;
+}
+
+.forge__bubble::before {
+  content: "";
+  position: absolute;
+  left: -6px;
+  top: 18px;
+  width: 10px;
+  height: 10px;
+  background: var(--surface-2);
+  border-left: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  transform: rotate(45deg);
+}
+
+.forge__bubble-name {
+  margin: 0 0 3px;
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.forge__bubble-line {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--text);
+}
+
+.forge__input {
+  width: 100%;
+  resize: vertical;
+  min-height: 68px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 11px 13px;
+  color: var(--text);
+  font-size: 14px;
+  font-family: var(--font-body);
+  line-height: 1.4;
+  outline: none;
+}
+
+.forge__input:focus {
+  border-color: var(--accent);
+}
+
+.forge__input::placeholder {
+  color: #5a626d;
+}
+
+.forge__btn {
+  width: 100%;
+  margin-top: 10px;
+  padding: 12px;
+  border: none;
+  border-radius: 12px;
+  background: var(--accent);
+  color: #0b0e13;
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.forge__btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.forge__btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.forge__spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(11, 14, 19, 0.3);
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: forge-spin 0.7s linear infinite;
+}
+
+.forge__spinner--muted {
+  border-color: var(--border);
+  border-top-color: var(--accent);
+}
+
+@keyframes forge-spin {
+  to { transform: rotate(360deg); }
+}
+
+.forge__loading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.forge__result-label {
+  margin: 16px 0 0;
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.forge__error {
+  margin: 10px 0 0;
+  font-size: 13px;
+  color: #f3a9b4;
+  line-height: 1.4;
+}
+
+.forge__ideas {
+  list-style: none;
+  margin: 14px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.forge__idea {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+.forge__idea-text {
+  flex: 1;
+  font-size: 14px;
+  line-height: 1.35;
+}
+
+.forge__idea-actions {
+  flex: none;
+  display: flex;
+  gap: 6px;
+}
+
+.forge__take {
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--muted);
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.forge__take:not(:disabled):hover {
+  border-color: var(--accent);
+  color: var(--text);
+}
+
+.forge__take--avulsa {
+  color: var(--accent);
+}
+
+.forge__take:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Tooltip bonito (Hoje / Avulsa) */
+.tip {
+  position: relative;
+  display: inline-flex;
+}
+
+.tip__pop {
+  position: absolute;
+  bottom: calc(100% + 9px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  width: max-content;
+  max-width: 190px;
+  padding: 9px 11px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  font-family: var(--font-body);
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--text);
+  text-align: left;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  z-index: 30;
+}
+
+.tip__pop--right {
+  left: auto;
+  right: 0;
+  transform: translateY(4px);
+}
+
+.tip:hover .tip__pop {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.tip:hover .tip__pop--right {
+  transform: translateY(0);
+}
+
+.tip__pop::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  width: 9px;
+  height: 9px;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.tip__pop--right::after {
+  left: auto;
+  right: 16px;
+}
+
 .ghost {
   margin-top: auto;
   padding: 13px;
@@ -608,6 +909,11 @@ body {
 }
 
 /* Loja */
+.shop-modes {
+  display: flex;
+  gap: 8px;
+}
+
 .shop-hero {
   display: flex;
   flex-direction: column;
@@ -617,6 +923,13 @@ body {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 18px;
+}
+
+.shop-hero__caption {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 13px;
+  color: var(--muted);
 }
 
 .shop-gold {
