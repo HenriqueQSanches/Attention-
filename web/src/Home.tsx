@@ -125,7 +125,7 @@ export function Home({
       ) : (
         <>
           <QuestForge
-            pet={character.pet}
+            assistantId={character.assistant}
             dailyFull={daily.length >= 3}
             busy={working}
             onAdd={add}

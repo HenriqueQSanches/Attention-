@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { buyItem, buyPet, equipItem, equipPet, unequipSlot } from "./api.ts";
+import { buyItem, buyAssistant, equipItem, equipAssistant, unequipSlot } from "./api.ts";
 import { BrandHeader } from "./BrandHeader.tsx";
 import { CharacterCanvas } from "./CharacterCanvas.tsx";
-import { Pet } from "./Pet.tsx";
-import { PETS, SHOP_ITEMS, TIER_LABEL, buildLayers, petById } from "./data.ts";
+import { Assistant } from "./Assistant.tsx";
+import { ASSISTANTS, SHOP_ITEMS, TIER_LABEL, buildLayers, assistantById } from "./data.ts";
 import type { Character, ShopSlot } from "./types.ts";
 
 type Props = {
@@ -11,7 +11,7 @@ type Props = {
   onCharacterUpdate: (c: Character) => void;
 };
 
-type Mode = "roupas" | "pets";
+type Mode = "roupas" | "assistants";
 
 const SLOT_LABEL: Record<ShopSlot, string> = {
   torso: "Torso",
@@ -59,7 +59,7 @@ export function Loja({ character, onCharacterUpdate }: Props) {
     feet:      character.feet ?? undefined,
   });
 
-  const equippedPet = petById(character.pet);
+  const equippedAssistant = assistantById(character.assistant);
 
   return (
     <main className="screen screen--with-nav" style={{ ["--accent" as string]: character.accent }}>
@@ -75,10 +75,10 @@ export function Loja({ character, onCharacterUpdate }: Props) {
         </button>
         <button
           type="button"
-          className={`chip chip--text${mode === "pets" ? " chip--on" : ""}`}
-          onClick={() => { setMode("pets"); setMsg(null); }}
+          className={`chip chip--text${mode === "assistants" ? " chip--on" : ""}`}
+          onClick={() => { setMode("assistants"); setMsg(null); }}
         >
-          Mascotes
+          Arautos
         </button>
       </div>
 
@@ -187,8 +187,8 @@ export function Loja({ character, onCharacterUpdate }: Props) {
       ) : (
         <>
           <div className="shop-hero">
-            <Pet seed={equippedPet.seed} size={128} options={equippedPet.opts} />
-            <p className="shop-hero__caption">{equippedPet.name} acompanha você</p>
+            <Assistant seed={equippedAssistant.seed} size={128} options={equippedAssistant.opts} />
+            <p className="shop-hero__caption">{equippedAssistant.name} é o teu arauto</p>
             <div className="shop-gold">
               <svg viewBox="0 0 16 16" fill="currentColor" width="14" height="14">
                 <path d="M 8 2 L 14 8 L 8 14 L 2 8 Z" />
@@ -200,17 +200,17 @@ export function Loja({ character, onCharacterUpdate }: Props) {
           {msg && <p className="shop-msg">{msg}</p>}
 
           <div className="shop-grid">
-            {PETS.map((pet) => {
-              const owned = character.ownedPets.includes(pet.id);
-              const equipped = character.pet === pet.id;
+            {ASSISTANTS.map((a) => {
+              const owned = character.ownedAssistants.includes(a.id);
+              const equipped = character.assistant === a.id;
               return (
-                <div key={pet.id} className={`shop-card${equipped ? " shop-card--equipped" : ""}`}>
+                <div key={a.id} className={`shop-card${equipped ? " shop-card--equipped" : ""}`}>
                   <div className="shop-card__sprite">
-                    <Pet seed={pet.seed} size={80} options={pet.opts} />
+                    <Assistant seed={a.seed} size={80} options={a.opts} />
                   </div>
-                  <p className="shop-card__name">{pet.name}</p>
-                  <p className="shop-card__tier" style={{ color: TIER_COLOR[pet.tier] }}>
-                    {TIER_LABEL[pet.tier]}
+                  <p className="shop-card__name">{a.name}</p>
+                  <p className="shop-card__tier" style={{ color: TIER_COLOR[a.tier] }}>
+                    {TIER_LABEL[a.tier]}
                   </p>
                   {equipped ? (
                     <span className="shop-card__badge">Ativo</span>
@@ -218,7 +218,7 @@ export function Loja({ character, onCharacterUpdate }: Props) {
                     <button
                       className="shop-card__btn"
                       type="button"
-                      onClick={() => run(() => equipPet(pet.id))}
+                      onClick={() => run(() => equipAssistant(a.id))}
                       disabled={busy}
                     >
                       Ativar
@@ -227,14 +227,14 @@ export function Loja({ character, onCharacterUpdate }: Props) {
                     <button
                       className="shop-card__btn"
                       type="button"
-                      onClick={() => run(() => buyPet(pet.id, pet.price), `${pet.name} adotado! Ative abaixo.`)}
-                      disabled={busy || character.gold < pet.price}
-                      title={character.gold < pet.price ? "Ouro insuficiente" : undefined}
+                      onClick={() => run(() => buyAssistant(a.id, a.price), `${a.name} recrutado! Ative abaixo.`)}
+                      disabled={busy || character.gold < a.price}
+                      title={character.gold < a.price ? "Ouro insuficiente" : undefined}
                     >
                       <svg viewBox="0 0 16 16" fill="currentColor" width="11" height="11">
                         <path d="M 8 2 L 14 8 L 8 14 L 2 8 Z" />
                       </svg>
-                      {pet.price}
+                      {a.price}
                     </button>
                   )}
                 </div>

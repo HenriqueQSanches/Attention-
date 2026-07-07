@@ -8,7 +8,7 @@ type Props = {
   options?: Record<string, unknown>;
 };
 
-export function Pet({ seed, size = 72, options }: Props) {
+export function Assistant({ seed, size = 72, options }: Props) {
   const uri = useMemo(
     () => createAvatar(bottts, { seed, radius: 16, ...options }).toDataUri(),
     [seed, options],
@@ -18,7 +18,7 @@ export function Pet({ seed, size = 72, options }: Props) {
       src={uri}
       width={size}
       height={size}
-      alt="Mascote"
+      alt="Arauto"
       style={{ display: "block" }}
     />
   );

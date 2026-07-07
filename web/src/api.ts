@@ -105,23 +105,23 @@ export async function unequipSlot(slot: string): Promise<Character> {
   return data.character;
 }
 
-export async function buyPet(petId: string, price: number): Promise<Character> {
+export async function buyAssistant(assistantId: string, price: number): Promise<Character> {
   const data = await parse(
-    await fetch("/api/pets/buy", {
+    await fetch("/api/assistants/buy", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ petId, price }),
+      body: JSON.stringify({ assistantId, price }),
     }),
   );
   return data.character;
 }
 
-export async function equipPet(petId: string): Promise<Character> {
+export async function equipAssistant(assistantId: string): Promise<Character> {
   const data = await parse(
-    await fetch("/api/pets/equip", {
+    await fetch("/api/assistants/equip", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ petId }),
+      body: JSON.stringify({ assistantId }),
     }),
   );
   return data.character;

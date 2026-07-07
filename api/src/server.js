@@ -1,13 +1,13 @@
 import { createServer } from "node:http";
 import {
   buyItem,
-  buyPet,
+  buyAssistant,
   completeQuest,
   createCharacter,
   createQuest,
   deleteQuest,
   equipItem,
-  equipPet,
+  equipAssistant,
   getCharacter,
   listQuests,
   resetCharacter,
@@ -142,22 +142,22 @@ const server = createServer(async (req, res) => {
       return sendJson(res, 200, { character: unequipSlot(slot) });
     }
 
-    // ── Pets: adotar / equipar ──────────────────────────────────────────
-    if (path === "/api/pets/buy" && method === "POST") {
+    // ── Arautos: desbloquear / ativar ───────────────────────────────────
+    if (path === "/api/assistants/buy" && method === "POST") {
       const body = await readJson(req);
-      const petId = String(body.petId ?? "").trim();
+      const assistantId = String(body.assistantId ?? "").trim();
       const price = Number(body.price);
-      if (!petId || !Number.isFinite(price) || price < 0)
-        return sendJson(res, 400, { error: "petId e price validos sao obrigatorios." });
-      return sendJson(res, 200, { character: buyPet(petId, price) });
+      if (!assistantId || !Number.isFinite(price) || price < 0)
+        return sendJson(res, 400, { error: "assistantId e price validos sao obrigatorios." });
+      return sendJson(res, 200, { character: buyAssistant(assistantId, price) });
     }
 
-    if (path === "/api/pets/equip" && method === "POST") {
+    if (path === "/api/assistants/equip" && method === "POST") {
       const body = await readJson(req);
-      const petId = String(body.petId ?? "").trim();
-      if (!petId)
-        return sendJson(res, 400, { error: "petId e obrigatorio." });
-      return sendJson(res, 200, { character: equipPet(petId) });
+      const assistantId = String(body.assistantId ?? "").trim();
+      if (!assistantId)
+        return sendJson(res, 400, { error: "assistantId e obrigatorio." });
+      return sendJson(res, 200, { character: equipAssistant(assistantId) });
     }
 
     sendJson(res, 404, { error: "Rota nao encontrada." });

@@ -13,8 +13,8 @@ export type Character = {
   legs: string | null;
   feet: string | null;
   ownedItems: string[];
-  pet: string;
-  ownedPets: string[];
+  assistant: string;
+  ownedAssistants: string[];
   createdAt: string;
 };
 

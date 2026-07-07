@@ -1,18 +1,18 @@
 import { useState } from "react";
 import { suggestQuests } from "./api.ts";
-import { Pet } from "./Pet.tsx";
-import { petById } from "./data.ts";
+import { Assistant } from "./Assistant.tsx";
+import { assistantById } from "./data.ts";
 import type { QuestKind } from "./types.ts";
 
 type Props = {
-  pet: string;
+  assistantId: string;
   dailyFull: boolean;
   busy: boolean;
   onAdd: (kind: QuestKind, title: string) => void;
 };
 
-export function QuestForge({ pet, dailyFull, busy, onAdd }: Props) {
-  const mascot = petById(pet);
+export function QuestForge({ assistantId, dailyFull, busy, onAdd }: Props) {
+  const assistant = assistantById(assistantId);
   const [text, setText] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -45,11 +45,11 @@ export function QuestForge({ pet, dailyFull, busy, onAdd }: Props) {
   return (
     <section className="quests forge">
       <div className="forge__mascot">
-        <Pet seed={mascot.seed} size={64} options={mascot.opts} />
+        <Assistant seed={assistant.seed} size={64} options={assistant.opts} />
         <div className="forge__bubble">
-          <p className="forge__bubble-name">{mascot.name}</p>
+          <p className="forge__bubble-name">{assistant.name}</p>
           <p className="forge__bubble-line">
-            {loading ? "Deixa comigo, cortando em pedaços..." : mascot.line}
+            {loading ? "Deixa comigo, cortando em pedaços..." : assistant.line}
           </p>
         </div>
       </div>
@@ -72,7 +72,7 @@ export function QuestForge({ pet, dailyFull, busy, onAdd }: Props) {
         {loading ? (
           <>
             <span className="forge__spinner" />
-            {mascot.name} está pensando...
+            {assistant.name} está pensando...
           </>
         ) : (
           "Destrinchar em quests"
@@ -91,7 +91,7 @@ export function QuestForge({ pet, dailyFull, busy, onAdd }: Props) {
       {ideas.length > 0 && (
         <>
           <p className="forge__result-label">
-            {mascot.name} quebrou em {ideas.length}{" "}
+            {assistant.name} quebrou em {ideas.length}{" "}
             {ideas.length === 1 ? "quest" : "quests"}. Escolha quais entram:
           </p>
           <ul className="forge__ideas">

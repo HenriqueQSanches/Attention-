@@ -231,18 +231,18 @@ export const TIER_LABEL: Record<string, string> = {
   epic:   "Épico",
 };
 
-// ── Pets (mascote da IA que destrincha tarefas) ──────────────────────────
-export type Pet = {
+// ── Arautos (aparências da Iris, a assistente que destrincha tarefas) ─────
+export type Assistant = {
   id: string;
   name: string;
   seed: string;   // semente do DiceBear (estilo bottts)
-  price: number;  // 0 = inicial, já vem adotado
+  price: number;  // 0 = inicial, já vem desbloqueado
   tier: "common" | "rare" | "epic";
-  line: string;   // fala do mascote na forja de quests
+  line: string;   // fala do arauto na forja de quests
   opts?: Record<string, unknown>; // opções fixas do DiceBear (traços do rosto/cor)
 };
 
-export const PETS: Pet[] = [
+export const ASSISTANTS: Assistant[] = [
   { id: "bolt",  name: "Iris",  seed: "iris-aurora",        price: 0,   tier: "common", line: "Sou a Iris, tua parceira de sempre. Manda a missão grande que eu divido em passos possíveis.", opts: { baseColor: ["a78bfa"], eyes: ["happy"], mouth: ["smile01"], face: ["round01"] } },
   { id: "pip",   name: "Pip",   seed: "pip-spark-77",       price: 120, tier: "common", line: "Pip na área! Solta a tarefa cabeluda que eu pico ela pra você." },
   { id: "sil",   name: "Sil",   seed: "sil-circuit-42",     price: 120, tier: "common", line: "Aqui é a Sil. Me diz o bicho de sete cabeças e eu devolvo em pedacinhos." },
@@ -252,6 +252,6 @@ export const PETS: Pet[] = [
   { id: "titan", name: "Titan", seed: "titan-core-01",      price: 550, tier: "epic",   line: "Titan em campo. Missões colossais são a minha especialidade." },
 ];
 
-export function petById(id: string): Pet {
-  return PETS.find((p) => p.id === id) ?? PETS[0];
+export function assistantById(id: string): Assistant {
+  return ASSISTANTS.find((a) => a.id === id) ?? ASSISTANTS[0];
 }
