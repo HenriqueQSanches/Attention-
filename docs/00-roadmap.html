@@ -1,0 +1,223 @@
+<style>
+  :root{
+    --bg:#0e1116; --surface:#161b22; --surface-2:#1c2330; --border:#232a33; --border-soft:#1e242c;
+    --text:#e6edf3; --muted:#8b949e; --faint:#5a626d; --accent:#6366f1; --violet:#a78bfa; --amber:#d99a2b;
+    --ok:#6ee7a8; --warn:#d99a2b; --no:#f3a9b4;
+    --sans:ui-sans-serif,system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --mono:ui-monospace,"Cascadia Code","SF Mono",Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:radial-gradient(1200px 600px at 50% -200px,rgba(99,102,241,0.10),transparent 70%),var(--bg);color:var(--text);font-family:var(--sans);line-height:1.65;-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:760px;margin:0 auto;padding:56px 22px 96px;}
+  .brand{display:flex;align-items:center;gap:10px;}
+  .brand__word{font-size:17px;font-weight:700;letter-spacing:.01em;color:var(--accent);}
+  .eyebrow{margin:30px 0 0;font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);}
+  h1{margin:10px 0 0;font-size:38px;font-weight:700;letter-spacing:-.025em;line-height:1.08;text-wrap:balance;}
+  .lede{margin:14px 0 0;font-size:17px;color:var(--muted);max-width:60ch;}
+  .meta{margin:22px 0 0;display:flex;flex-wrap:wrap;gap:8px 10px;}
+  .tag{font-family:var(--mono);font-size:11.5px;color:var(--muted);background:var(--surface-2);border:1px solid var(--border);border-radius:999px;padding:4px 10px;}
+  .tag--live{color:var(--violet);border-color:rgba(167,139,250,.35);}
+  hr.rule{border:0;border-top:1px solid var(--border-soft);margin:44px 0;}
+  h2{margin:0 0 4px;font-size:13px;font-family:var(--mono);font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--violet);}
+  section{margin-top:42px;}
+  h3.sub{margin:0;font-size:22px;font-weight:650;letter-spacing:-.01em;}
+  p{margin:12px 0 0;} p,li{max-width:64ch;}
+  strong{color:#fff;font-weight:650;}
+  ul.list{margin:12px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:10px;}
+  ul.list li{position:relative;padding-left:22px;}
+  ul.list li::before{content:"";position:absolute;left:4px;top:10px;width:6px;height:6px;border-radius:50%;background:var(--accent);}
+  code{font-family:var(--mono);color:#cbd3de;}
+  a{color:var(--violet);text-decoration:none;} a:hover{text-decoration:underline;}
+
+  /* cards das frentes */
+  .fronts{margin-top:16px;display:flex;flex-direction:column;gap:12px;}
+  .front{display:flex;gap:14px;align-items:flex-start;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px 18px;}
+  .front__ico{font-size:24px;line-height:1;flex:none;margin-top:2px;}
+  .front__t{font-size:16px;font-weight:650;}
+  .front__t a{color:#fff;} .front__t a:hover{color:var(--violet);}
+  .front__d{margin-top:3px;font-size:14px;color:var(--muted);}
+
+  /* stepper da ordem */
+  .steps{margin-top:18px;}
+  .step{display:flex;gap:16px;}
+  .step__rail{display:flex;flex-direction:column;align-items:center;flex:none;}
+  .step__num{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-weight:700;font-size:15px;border:1px solid var(--border);}
+  .step__num--1{color:var(--ok);border-color:rgba(110,231,168,.4);background:rgba(110,231,168,.08);}
+  .step__num--2{color:var(--violet);border-color:rgba(167,139,250,.4);background:rgba(167,139,250,.08);}
+  .step__num--3{color:var(--amber);border-color:rgba(217,154,43,.4);background:rgba(217,154,43,.08);}
+  .step__line{flex:1;width:2px;background:var(--border);margin:6px 0;}
+  .step:last-child .step__line{display:none;}
+  .step__body{padding-bottom:26px;}
+  .step:last-child .step__body{padding-bottom:0;}
+  .step__name{font-size:18px;font-weight:650;}
+  .step__why{margin-top:5px;font-size:14.5px;color:var(--muted);}
+
+  /* tabela comparativa */
+  .tablewrap{margin-top:16px;overflow-x:auto;border:1px solid var(--border);border-radius:14px;}
+  table{width:100%;border-collapse:collapse;font-size:14px;min-width:560px;}
+  th,td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--border-soft);}
+  thead th{font-family:var(--mono);font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);font-weight:600;}
+  tbody tr:last-child td{border-bottom:0;}
+  td:first-child{color:#fff;font-weight:600;}
+  .lvl{display:inline-flex;align-items:center;gap:7px;white-space:nowrap;}
+  .dot{width:8px;height:8px;border-radius:50%;flex:none;}
+  .dot--lo{background:var(--ok);} .dot--mid{background:var(--amber);} .dot--hi{background:var(--no);} .dot--val{background:var(--violet);}
+  td.ord{font-family:var(--mono);font-weight:700;color:var(--violet);}
+
+  blockquote{margin:16px 0 0;padding:18px 20px;background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--violet);border-radius:12px;font-size:17px;color:#f0f2f7;}
+  footer{margin-top:56px;padding-top:22px;border-top:1px solid var(--border-soft);color:var(--faint);font-size:13px;}
+</style>
+
+<div class="wrap">
+
+  <div class="brand">
+    <svg width="26" height="26" viewBox="0 0 64 64" aria-hidden="true">
+      <defs><radialGradient id="iris" cx="50%" cy="56%" r="62%"><stop offset="0%" stop-color="#c4b5fd"/><stop offset="55%" stop-color="#8b5cf6"/><stop offset="100%" stop-color="#4f46e5"/></radialGradient></defs>
+      <path d="M6 32 Q32 12 58 32 Q32 52 6 32 Z" fill="#0e1116"/>
+      <circle cx="32" cy="32" r="15" fill="url(#iris)"/><circle cx="32" cy="32" r="4.6" fill="#0b0e13"/><circle cx="30.2" cy="30.2" r="1.5" fill="#fff"/>
+      <path d="M6 32 Q32 12 58 32 Q32 52 6 32 Z" fill="none" stroke="#e6edf3" stroke-opacity=".9" stroke-width="2"/>
+    </svg>
+    <span class="brand__word">Attention!</span>
+  </div>
+
+  <p class="eyebrow">Documento de planejamento &middot; índice</p>
+  <h1>Roadmap das próximas sprints</h1>
+  <p class="lede">
+    Eu tenho três frentes planejadas: Acessórios, Pet e Casa. Este doc é o mapa que
+    amarra os três e, principalmente, decide <strong>em que ordem</strong> eu ataco e por quê.
+  </p>
+  <div class="meta">
+    <span class="tag">Autor: Henrique</span>
+    <span class="tag">Projeto: attention!</span>
+    <span class="tag tag--live">Índice dos planos em docs/</span>
+  </div>
+
+  <hr class="rule" />
+
+  <section>
+    <h2>As três frentes</h2>
+    <div class="fronts">
+      <div class="front">
+        <span class="front__ico">🕶️</span>
+        <div>
+          <div class="front__t"><a href="plano-acessorios.html">Acessórios</a></div>
+          <div class="front__d">Óculos, chapéus, bonés, brincos, piercings e tatuagens. Mais camadas no personagem.</div>
+        </div>
+      </div>
+      <div class="front">
+        <span class="front__ico">🦊</span>
+        <div>
+          <div class="front__t"><a href="plano-pet-companheiro.html">Pet companheiro</a></div>
+          <div class="front__d">Um bicho ao lado do herói (elenco de 10). A Iris já virou Arauto (a assistente), então "pet" ficou livre pro bicho.</div>
+        </div>
+      </div>
+      <div class="front">
+        <span class="front__ico">🏠</span>
+        <div>
+          <div class="front__t"><a href="plano-casas-mobilia.html">Casas e Mobília</a></div>
+          <div class="front__d">Comprar casa e mobiliar arrastando os móveis. Tem <a href="proto-casa-mobiliar.html">protótipo</a>.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>A ordem que eu vou seguir</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step__rail"><div class="step__num step__num--1">1</div><div class="step__line"></div></div>
+        <div class="step__body">
+          <div class="step__name">Acessórios</div>
+          <div class="step__why">O mais barato de todos. Sem mecânica nova, é só mais camada no boneco, e 4 dos 6 já têm arte pronta. Começo ganhando com pouco esforço.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step__rail"><div class="step__num step__num--2">2</div><div class="step__line"></div></div>
+        <div class="step__body">
+          <div class="step__name">Pet (com o acerto de nome da Iris)</div>
+          <div class="step__why">Código fácil (sprite ao lado do herói). O nome da Iris eu já arrumei (virou Arauto), então "pet" está livre. O que segura aqui é a arte dos bichos, não a lógica.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step__rail"><div class="step__num step__num--3">3</div><div class="step__line"></div></div>
+        <div class="step__body">
+          <div class="step__name">Casa e Mobília</div>
+          <div class="step__why">A maior das três: mecânica nova (arrastar), mais arte (móveis e cômodos), maior payoff. Deixo pro fim, quando já tiver os dois primeiros no bolso e embalo pra encarar a grande.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Por que essa ordem</h2>
+    <ul class="list">
+      <li><strong>Esforço crescente.</strong> Vou do que quase não custa (acessório) pro que custa mais (casa). Cada entrega me dá moral pra próxima.</li>
+      <li><strong>Reaproveitar antes de inventar.</strong> Acessório e Pet reusam a loja e o equipar que já existem. A Casa é a única que traz mecânica nova, então vem por último.</li>
+      <li><strong>Arrumar a casa cedo.</strong> Housekeeping barato primeiro. O rename da Iris pra Arauto eu já fiz, justamente pra não acumular confusão.</li>
+      <li><strong>A arte é sempre o gargalo.</strong> Em todas as três, o código é tranquilo e o que dá trabalho é o sprite. Ordenar por custo de arte também bate com essa ordem.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Comparativo</h2>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Frente</th><th>Mecânica nova</th><th>Código</th><th>Custo de arte</th><th>Valor</th><th>Ordem</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>Acessórios</td><td>Não</td>
+            <td><span class="lvl"><span class="dot dot--lo"></span>Baixo</span></td>
+            <td><span class="lvl"><span class="dot dot--lo"></span>Baixo (4/6 prontos)</span></td>
+            <td><span class="lvl"><span class="dot dot--val"></span>Alto</span></td>
+            <td class="ord">1º</td>
+          </tr>
+          <tr>
+            <td>Pet</td><td>Não</td>
+            <td><span class="lvl"><span class="dot dot--lo"></span>Baixo</span></td>
+            <td><span class="lvl"><span class="dot dot--mid"></span>Médio (garimpo)</span></td>
+            <td><span class="lvl"><span class="dot dot--val"></span>Alto</span></td>
+            <td class="ord">2º</td>
+          </tr>
+          <tr>
+            <td>Casa</td><td>Sim (arrastar)</td>
+            <td><span class="lvl"><span class="dot dot--mid"></span>Médio</span></td>
+            <td><span class="lvl"><span class="dot dot--hi"></span>Alto (móveis + cômodos)</span></td>
+            <td><span class="lvl"><span class="dot dot--val"></span>Muito alto</span></td>
+            <td class="ord">3º</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>O padrão que se repete</h2>
+    <blockquote>
+      As três frentes são a mesma receita: item na loja, equipar, desenhar em camada.
+      Eu aprendo uma vez e uso três. É por isso que nenhuma delas é um monstro de código.
+    </blockquote>
+  </section>
+
+  <section>
+    <h2>Antes de ir pra produção</h2>
+    <p>Housekeeping que não é feature, mas preciso lembrar antes de pensar em deploy ou PWA:</p>
+    <ul class="list">
+      <li><strong>Consertar 2 erros de build antigos</strong> (Casa.tsx e NavBar.tsx) que travam o <code>pnpm build</code>. Não atrapalham o dia a dia, mas bloqueiam a produção.</li>
+      <li><strong>Rename da Iris para Arauto: feito.</strong> Já separei a assistente do futuro pet, com a palavra "pet" livre pra usar no bicho.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Resumindo</h2>
+    <p>
+      <strong>Acessórios → Pet → Casa.</strong> Do fácil e reaproveitável pro ambicioso e novo. Cada
+      passo entrega algo jogável, junta ouro pra gastar, e me deixa mais perto da
+      Casa, que é a joia da coroa.
+    </p>
+  </section>
+
+  <footer>
+    attention! &middot; roadmap das próximas sprints &middot; índice vivo, atualizo conforme decido.
+  </footer>
+
+</div>
