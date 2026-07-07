@@ -1,0 +1,279 @@
+<style>
+  :root{
+    --bg:#0e1116; --surface:#161b22; --surface-2:#1c2330; --border:#232a33;
+    --text:#e6edf3; --muted:#8b949e; --faint:#5a626d; --accent:#6366f1; --violet:#a78bfa; --amber:#d99a2b;
+    --sans:ui-sans-serif,system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --mono:ui-monospace,"Cascadia Code","SF Mono",Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:radial-gradient(1000px 500px at 50% -180px,rgba(99,102,241,0.10),transparent 70%),var(--bg);
+    color:var(--text); font-family:var(--sans); -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:600px;margin:0 auto;padding:40px 18px 72px;}
+  .brand{display:flex;align-items:center;gap:9px;}
+  .brand__word{font-size:16px;font-weight:700;color:var(--accent);}
+  .eyebrow{margin:22px 0 0;font-family:var(--mono);font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);}
+  h1{margin:8px 0 0;font-size:27px;font-weight:700;letter-spacing:-.02em;}
+  .lede{margin:10px 0 0;color:var(--muted);font-size:15px;max-width:52ch;}
+
+  .stage{
+    margin:22px 0 0; background:var(--surface); border:1px solid var(--border);
+    border-radius:18px; padding:14px; box-shadow:0 22px 55px rgba(0,0,0,.45);
+  }
+  .stage__bar{display:flex;align-items:center;justify-content:space-between;padding:2px 4px 12px;}
+  .stage__title{display:flex;align-items:center;gap:8px;font-weight:650;font-size:14px;}
+  .stage__gold{font-family:var(--mono);font-size:12px;color:var(--amber);background:rgba(217,154,43,.10);border:1px solid rgba(217,154,43,.25);padding:3px 9px;border-radius:999px;}
+
+  .room{
+    position:relative; width:100%; aspect-ratio:360/232; border-radius:12px; overflow:hidden;
+    background:#221d1a; touch-action:none; user-select:none;
+  }
+  .room__bg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;}
+  .piece{
+    position:absolute; transform:translate(-50%,-50%); cursor:grab;
+    touch-action:none; filter:drop-shadow(0 4px 6px rgba(0,0,0,.4));
+    transition:filter .12s ease;
+  }
+  .piece svg{display:block;}
+  .piece.dragging{cursor:grabbing;filter:drop-shadow(0 10px 14px rgba(0,0,0,.6));}
+  .piece:focus-visible{outline:2px solid var(--violet);outline-offset:3px;border-radius:6px;}
+  .piece.selected::after{
+    content:""; position:absolute; inset:-7px;
+    border:1.5px dashed var(--violet); border-radius:8px; pointer-events:none;
+  }
+  .piece__tools{
+    position:absolute; left:50%; bottom:100%; transform:translate(-50%,-8px);
+    display:flex; gap:4px; padding:4px;
+    background:var(--surface-2); border:1px solid var(--border); border-radius:9px;
+    box-shadow:0 6px 16px rgba(0,0,0,.5);
+  }
+  .piece__tools.below{ bottom:auto; top:100%; transform:translate(-50%,8px); }
+  .piece__tools button{
+    width:27px; height:27px; border:0; border-radius:6px; background:transparent;
+    color:var(--muted); cursor:pointer; font-size:13px; line-height:1; padding:0;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .piece__tools button:hover{ background:var(--surface); color:#fff; }
+  .piece__tools button.rm:hover{ color:#f3a9b4; }
+
+  .hint{margin:10px 2px 0;font-size:12.5px;color:var(--faint);}
+  .tray{margin:14px 0 0;}
+  .tray__label{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);}
+  .tray__row{margin-top:8px;display:flex;flex-wrap:wrap;gap:8px;}
+  .add{
+    display:inline-flex;align-items:center;gap:8px;cursor:pointer;
+    background:var(--surface-2);border:1px solid var(--border);border-radius:11px;
+    padding:7px 11px 7px 8px;color:var(--text);font-family:var(--sans);font-size:13px;
+  }
+  .add:hover{border-color:var(--violet);}
+  .add svg{display:block;}
+  .add__ico{width:30px;height:26px;display:flex;align-items:center;justify-content:center;}
+  .ghost{
+    margin-left:auto;background:transparent;border:1px solid var(--border);color:var(--muted);
+    border-radius:11px;padding:7px 14px;cursor:pointer;font-size:13px;font-family:var(--sans);
+  }
+  .ghost:hover{border-color:#f3a9b4;color:#f3a9b4;}
+  footer{margin-top:26px;color:var(--faint);font-size:12.5px;}
+  code{font-family:var(--mono);color:#cbd3de;}
+</style>
+
+<div class="wrap">
+  <div class="brand">
+    <svg width="24" height="24" viewBox="0 0 64 64" aria-hidden="true">
+      <defs><radialGradient id="ir" cx="50%" cy="56%" r="62%"><stop offset="0%" stop-color="#c4b5fd"/><stop offset="55%" stop-color="#8b5cf6"/><stop offset="100%" stop-color="#4f46e5"/></radialGradient></defs>
+      <path d="M6 32 Q32 12 58 32 Q32 52 6 32 Z" fill="#0e1116"/>
+      <circle cx="32" cy="32" r="15" fill="url(#ir)"/><circle cx="32" cy="32" r="4.6" fill="#0b0e13"/><circle cx="30.2" cy="30.2" r="1.5" fill="#fff"/>
+      <path d="M6 32 Q32 12 58 32 Q32 52 6 32 Z" fill="none" stroke="#e6edf3" stroke-opacity=".9" stroke-width="2"/>
+    </svg>
+    <span class="brand__word">Attention!</span>
+  </div>
+
+  <p class="eyebrow">Protótipo interativo</p>
+  <h1>Mobiliar arrastando</h1>
+  <p class="lede">
+    Arrasto os móveis pra onde eu quiser, e eu que decido a ordem: seleciono um
+    móvel e mando ele pra frente ou pra trás. Assim eu adapto do meu jeito.
+  </p>
+
+  <div class="stage">
+    <div class="stage__bar">
+      <div class="stage__title">
+        <svg width="17" height="17" viewBox="0 0 64 64" aria-hidden="true"><path d="M6 32 Q32 12 58 32 Q32 52 6 32 Z" fill="none" stroke="#a78bfa" stroke-width="3"/><circle cx="32" cy="32" r="4" fill="#a78bfa"/></svg>
+        Minha Casa
+      </div>
+      <span class="stage__gold">◆ 1.240 ouro</span>
+    </div>
+
+    <div class="room" id="room">
+      <svg class="room__bg" viewBox="0 0 360 232" preserveAspectRatio="none" aria-hidden="true">
+        <rect x="0" y="0" width="360" height="150" fill="#221d1a"/>
+        <rect x="0" y="150" width="360" height="82" fill="#2c2420"/>
+        <line x1="0" y1="150" x2="360" y2="150" stroke="#3a302a" stroke-width="1.5"/>
+        <rect x="30" y="34" width="78" height="66" rx="5" fill="#2f2823" stroke="#3a332c" stroke-width="2"/>
+        <rect x="36" y="40" width="66" height="54" fill="#16233f"/>
+        <circle cx="88" cy="56" r="7" fill="#d9d2c0" opacity=".85"/>
+        <line x1="69" y1="40" x2="69" y2="94" stroke="#3a332c" stroke-width="2"/>
+        <line x1="36" y1="67" x2="102" y2="67" stroke="#3a332c" stroke-width="2"/>
+      </svg>
+    </div>
+
+    <p class="hint">Arraste para posicionar. Toque num móvel para selecionar: aí dá pra trazer pra frente (▲), mandar pra trás (▼) ou remover (✕).</p>
+
+    <div class="tray">
+      <span class="tray__label">Adicionar móvel</span>
+      <div class="tray__row" id="tray"></div>
+    </div>
+  </div>
+
+  <footer>
+    Só um protótipo pra sentir a interação: sem colisão, sem grade, posição e ordem livres.
+    No app de verdade, cada móvel vira um <code>{ id, x, y, z }</code> salvo no banco, e o
+    <code>z</code> é a ordem que eu escolho.
+  </footer>
+</div>
+
+<script>
+(function(){
+  var room = document.getElementById('room');
+  var tray = document.getElementById('tray');
+  var pieces = [];
+  var uid = 0, topZ = 10, botZ = 10;
+  var selected = null;
+
+  var ART = {
+    sofa: {label:'Sofá', w:96, h:50, svg:
+      '<svg width="96" height="50" viewBox="0 0 96 50"><rect x="4" y="14" width="88" height="20" rx="8" fill="#4a3f5a"/><rect x="0" y="22" width="18" height="26" rx="7" fill="#42374f"/><rect x="78" y="22" width="18" height="26" rx="7" fill="#42374f"/><rect x="14" y="28" width="68" height="20" rx="6" fill="#544766"/><rect x="20" y="18" width="28" height="16" rx="5" fill="#6f5f8c"/><rect x="50" y="18" width="28" height="16" rx="5" fill="#6f5f8c"/></svg>'},
+    mesa: {label:'Mesa', w:56, h:34, svg:
+      '<svg width="56" height="34" viewBox="0 0 56 34"><rect x="4" y="6" width="48" height="12" rx="3" fill="#5a4632"/><rect x="8" y="18" width="4" height="14" fill="#3a2d1f"/><rect x="44" y="18" width="4" height="14" fill="#3a2d1f"/><rect x="24" y="0" width="8" height="8" rx="2" fill="#5aa3a0"/></svg>'},
+    planta:{label:'Planta', w:38, h:56, svg:
+      '<svg width="38" height="56" viewBox="0 0 38 56"><path d="M13 38 L25 38 L22 54 L16 54 Z" fill="#6b4a2f"/><path d="M19 40 C6 28 9 12 19 6 C22 20 24 30 19 40 Z" fill="#4a7a52"/><path d="M19 40 C32 28 29 12 19 6 C16 20 14 30 19 40 Z" fill="#3f6a48"/></svg>'},
+    abajur:{label:'Abajur', w:34, h:64, svg:
+      '<svg width="34" height="64" viewBox="0 0 34 64"><ellipse cx="17" cy="60" rx="11" ry="3.5" fill="#4a4038"/><rect x="15" y="18" width="4" height="42" fill="#5a5048"/><path d="M5 18 L29 18 L24 0 L10 0 Z" fill="#d99a2b"/></svg>'},
+    tapete:{label:'Tapete', w:130, h:44, svg:
+      '<svg width="130" height="44" viewBox="0 0 130 44"><ellipse cx="65" cy="22" rx="63" ry="20" fill="#33283f"/><ellipse cx="65" cy="22" rx="50" ry="14" fill="#3f3350"/></svg>'},
+    quadro:{label:'Quadro', w:50, h:42, svg:
+      '<svg width="50" height="42" viewBox="0 0 50 42"><defs><linearGradient id="q'+(Math.random())+'" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#8b5cf6"/><stop offset="100%" stop-color="#4f46e5"/></linearGradient></defs><rect x="1" y="1" width="48" height="40" rx="4" fill="#2f2823" stroke="#3a332c" stroke-width="2"/><rect x="7" y="7" width="36" height="28" rx="2" fill="#6a5ac0"/><circle cx="25" cy="21" r="6" fill="#0e1116"/><circle cx="23.5" cy="19.5" r="1.6" fill="#fff"/></svg>'}
+  };
+
+  function place(p){
+    p.el.style.left = (p.fx*100)+'%';
+    p.el.style.top  = (p.fy*100)+'%';
+    p.el.style.zIndex = (selected===p) ? 99999 : p.z;
+    if(selected===p) positionTools(p);
+  }
+
+  function positionTools(p){
+    if(p.tools) p.tools.classList.toggle('below', p.fy < 0.30);
+  }
+
+  function select(p){
+    if(selected===p) return;
+    deselect();
+    selected = p;
+    p.el.classList.add('selected');
+    var t = document.createElement('div');
+    t.className = 'piece__tools';
+    t.innerHTML =
+      '<button data-a="front" title="Trazer pra frente" aria-label="Trazer pra frente">▲</button>' +
+      '<button data-a="back" title="Mandar pra tras" aria-label="Mandar pra tras">▼</button>' +
+      '<button data-a="rm" class="rm" title="Remover" aria-label="Remover">✕</button>';
+    t.addEventListener('pointerdown', function(e){ e.stopPropagation(); });
+    t.addEventListener('click', function(e){
+      var a = e.target.getAttribute('data-a');
+      if(a==='front'){ p.z = ++topZ; place(p); }
+      else if(a==='back'){ p.z = --botZ; place(p); }
+      else if(a==='rm'){ removePiece(p); }
+    });
+    p.tools = t;
+    p.el.appendChild(t);
+    place(p);
+  }
+
+  function deselect(){
+    if(!selected) return;
+    var p = selected;
+    p.el.classList.remove('selected');
+    if(p.tools){ p.tools.remove(); p.tools = null; }
+    selected = null;
+    place(p);
+  }
+
+  function makeInteractive(p){
+    var el = p.el;
+    el.addEventListener('pointerdown', function(e){
+      e.stopPropagation();
+      e.preventDefault();
+      select(p);
+      el.setPointerCapture(e.pointerId);
+      el.classList.add('dragging');
+      function move(ev){
+        var r = room.getBoundingClientRect();
+        p.fx = Math.min(0.95, Math.max(0.05, (ev.clientX - r.left)/r.width));
+        p.fy = Math.min(0.93, Math.max(0.14, (ev.clientY - r.top)/r.height));
+        place(p);
+      }
+      function up(){
+        el.classList.remove('dragging');
+        el.removeEventListener('pointermove', move);
+        el.removeEventListener('pointerup', up);
+        el.removeEventListener('pointercancel', up);
+      }
+      el.addEventListener('pointermove', move);
+      el.addEventListener('pointerup', up);
+      el.addEventListener('pointercancel', up);
+    });
+  }
+
+  function addPiece(type, fx, fy){
+    var art = ART[type];
+    var el = document.createElement('div');
+    el.className = 'piece';
+    el.tabIndex = 0;
+    el.innerHTML = art.svg;
+    el.setAttribute('aria-label', art.label);
+    var p = { id:++uid, type:type, el:el, fx:(fx==null?0.5:fx), fy:(fy==null?0.55:fy), z:++topZ, tools:null };
+    pieces.push(p);
+    room.appendChild(el);
+    place(p);
+    makeInteractive(p);
+    return p;
+  }
+
+  function removePiece(p){
+    if(selected===p) deselect();
+    var i = pieces.indexOf(p);
+    if(i>-1){ pieces.splice(i,1); if(p.el.parentNode) room.removeChild(p.el); }
+  }
+
+  room.addEventListener('pointerdown', function(){ deselect(); });
+
+  function reset(){
+    deselect();
+    pieces.slice().forEach(removePiece);
+    topZ = 10; botZ = 10;
+    addPiece('tapete', 0.5, 0.78);
+    addPiece('sofa',   0.5, 0.60);
+    addPiece('planta', 0.20, 0.72);
+    addPiece('abajur', 0.82, 0.58);
+    addPiece('mesa',   0.5, 0.80);
+    addPiece('quadro', 0.72, 0.26);
+    deselect();
+  }
+
+  Object.keys(ART).forEach(function(type){
+    var b = document.createElement('button');
+    b.className = 'add';
+    b.type = 'button';
+    b.innerHTML = '<span class="add__ico">'+ART[type].svg.replace(/width="\d+"/,'width="26"').replace(/height="\d+"/,'height="22"')+'</span>'+ART[type].label;
+    b.addEventListener('click', function(){ select(addPiece(type, 0.5, 0.5)); });
+    tray.appendChild(b);
+  });
+  var clr = document.createElement('button');
+  clr.className = 'ghost'; clr.type='button'; clr.textContent = 'Recomeçar';
+  clr.addEventListener('click', reset);
+  tray.appendChild(clr);
+
+  reset();
+})();
+</script>
