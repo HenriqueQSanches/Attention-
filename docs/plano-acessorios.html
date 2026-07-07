@@ -1,0 +1,233 @@
+<style>
+  :root{
+    --bg:#0e1116; --surface:#161b22; --surface-2:#1c2330; --border:#232a33; --border-soft:#1e242c;
+    --text:#e6edf3; --muted:#8b949e; --faint:#5a626d; --accent:#6366f1; --violet:#a78bfa; --amber:#d99a2b;
+    --ok:#6ee7a8; --warn:#d99a2b; --no:#f3a9b4;
+    --sans:ui-sans-serif,system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --mono:ui-monospace,"Cascadia Code","SF Mono",Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:radial-gradient(1200px 600px at 50% -200px,rgba(99,102,241,0.10),transparent 70%),var(--bg);
+    color:var(--text); font-family:var(--sans); line-height:1.65; -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:760px;margin:0 auto;padding:56px 22px 96px;}
+  .brand{display:flex;align-items:center;gap:10px;}
+  .brand__word{font-size:17px;font-weight:700;letter-spacing:.01em;color:var(--accent);}
+  .eyebrow{margin:30px 0 0;font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);}
+  h1{margin:10px 0 0;font-size:38px;font-weight:700;letter-spacing:-.025em;line-height:1.08;text-wrap:balance;}
+  .lede{margin:14px 0 0;font-size:17px;color:var(--muted);max-width:60ch;}
+  .meta{margin:22px 0 0;display:flex;flex-wrap:wrap;gap:8px 10px;}
+  .tag{font-family:var(--mono);font-size:11.5px;color:var(--muted);background:var(--surface-2);border:1px solid var(--border);border-radius:999px;padding:4px 10px;}
+  .tag--live{color:var(--violet);border-color:rgba(167,139,250,.35);}
+  hr.rule{border:0;border-top:1px solid var(--border-soft);margin:44px 0;}
+  h2{margin:0 0 4px;font-size:13px;font-family:var(--mono);font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--violet);}
+  section{margin-top:40px;}
+  h3.sub{margin:0;font-size:22px;font-weight:650;letter-spacing:-.01em;}
+  p{margin:12px 0 0;} p,li{max-width:64ch;}
+  strong{color:#fff;font-weight:650;}
+  ul.list{margin:12px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:10px;}
+  ul.list li{position:relative;padding-left:22px;}
+  ul.list li::before{content:"";position:absolute;left:4px;top:10px;width:6px;height:6px;border-radius:50%;background:var(--accent);}
+  blockquote{margin:16px 0 0;padding:18px 20px;background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--violet);border-radius:12px;font-size:18px;color:#f0f2f7;}
+  code{font-family:var(--mono);color:#cbd3de;}
+
+  /* mockup */
+  .mock{margin:18px 0 0;background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:16px;box-shadow:0 24px 60px rgba(0,0,0,.45);}
+  .mock__bar{display:flex;align-items:center;justify-content:space-between;padding:2px 4px 12px;}
+  .mock__title{display:flex;align-items:center;gap:8px;font-weight:650;font-size:15px;}
+  .mock__gold{font-family:var(--mono);font-size:12px;color:var(--amber);background:rgba(217,154,43,.10);border:1px solid rgba(217,154,43,.25);padding:3px 9px;border-radius:999px;}
+  .mock__stage{display:flex;justify-content:center;padding:14px;border-radius:12px;background:radial-gradient(180px 120px at 50% 42%,rgba(167,139,250,.14),transparent 70%),#161b22;}
+  .mock__stage img{width:200px;height:200px;image-rendering:pixelated;border-radius:10px;}
+  .mock__furnish{margin-top:14px;}
+  .mock__label{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);}
+  .chips{margin-top:8px;display:flex;flex-wrap:wrap;gap:8px;}
+  .chip{font-size:13px;color:var(--muted);background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:7px 12px;display:inline-flex;align-items:center;gap:8px;}
+  .chip--on{color:#fff;border-color:var(--violet);background:rgba(167,139,250,.12);}
+  .cap{margin:12px 2px 0;font-size:13px;color:var(--faint);}
+
+  /* tabela status */
+  .tablewrap{margin-top:14px;overflow-x:auto;border:1px solid var(--border);border-radius:14px;}
+  table{width:100%;border-collapse:collapse;font-size:14.5px;min-width:520px;}
+  th,td{text-align:left;padding:12px 16px;border-bottom:1px solid var(--border-soft);vertical-align:top;}
+  thead th{font-family:var(--mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600;}
+  tbody tr:last-child td{border-bottom:0;}
+  td:first-child{color:#fff;font-weight:600;}
+  td:nth-child(2){color:var(--muted);font-family:var(--mono);font-size:12.5px;}
+  .st{display:inline-flex;align-items:center;gap:8px;white-space:nowrap;}
+  .dot{width:9px;height:9px;border-radius:50%;flex:none;}
+  .dot--ok{background:var(--ok);} .dot--warn{background:var(--warn);} .dot--no{background:var(--no);} .dot--bonus{background:var(--violet);}
+
+  /* fases */
+  .phases{margin-top:16px;display:flex;flex-direction:column;gap:14px;}
+  .phase{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:20px;position:relative;overflow:hidden;}
+  .phase::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--accent);}
+  .phase--f1::before{background:var(--ok);} .phase--f2::before{background:var(--violet);} .phase--f3::before{background:var(--amber);}
+  .phase__head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;}
+  .phase__no{font-family:var(--mono);font-size:12px;color:var(--muted);letter-spacing:.1em;}
+  .phase__name{font-size:18px;font-weight:650;}
+  .phase__cost{margin-left:auto;font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;padding:3px 9px;border-radius:999px;border:1px solid var(--border);color:var(--muted);}
+  .phase__cost.low{color:var(--ok);border-color:rgba(110,231,168,.3);}
+  .phase__cost.mid{color:var(--amber);border-color:rgba(217,154,43,.3);}
+  .phase p{font-size:14.5px;color:var(--muted);margin-top:10px;}
+
+  pre{margin:14px 0 0;overflow-x:auto;background:#0b0e13;border:1px solid var(--border);border-radius:12px;padding:16px 18px;font-family:var(--mono);font-size:12.5px;line-height:1.7;color:#cbd3de;}
+  pre .c{color:var(--faint);} pre .k{color:var(--violet);}
+  footer{margin-top:56px;padding-top:22px;border-top:1px solid var(--border-soft);color:var(--faint);font-size:13px;}
+</style>
+
+<div class="wrap">
+
+  <div class="brand">
+    <svg width="26" height="26" viewBox="0 0 64 64" aria-hidden="true">
+      <defs><radialGradient id="iris" cx="50%" cy="56%" r="62%"><stop offset="0%" stop-color="#c4b5fd"/><stop offset="55%" stop-color="#8b5cf6"/><stop offset="100%" stop-color="#4f46e5"/></radialGradient></defs>
+      <path d="M6 32 Q32 12 58 32 Q32 52 6 32 Z" fill="#0e1116"/>
+      <circle cx="32" cy="32" r="15" fill="url(#iris)"/><circle cx="32" cy="32" r="4.6" fill="#0b0e13"/><circle cx="30.2" cy="30.2" r="1.5" fill="#fff"/>
+      <path d="M6 32 Q32 12 58 32 Q32 52 6 32 Z" fill="none" stroke="#e6edf3" stroke-opacity=".9" stroke-width="2"/>
+    </svg>
+    <span class="brand__word">Attention!</span>
+  </div>
+
+  <p class="eyebrow">Documento de planejamento</p>
+  <h1>Acessórios</h1>
+  <p class="lede">
+    Óculos, boné, chapéu, brinco, piercing e tatuagem. Antes de codar, quero saber
+    o que é fácil, o que dá trabalho, e por onde começar. Spoiler: é o mais fácil
+    de tudo que eu já planejei.
+  </p>
+  <div class="meta">
+    <span class="tag">Autor: Henrique</span>
+    <span class="tag">Projeto: attention!</span>
+    <span class="tag tag--live">Status: rascunho, nada codado ainda</span>
+  </div>
+
+  <hr class="rule" />
+
+  <section>
+    <h2>Por que eu quero</h2>
+    <p>
+      Acessório é <strong>expressão</strong>. Duas pessoas com a mesma roupa ficam diferentes na
+      hora que uma põe óculos e a outra um chapéu. Além disso, é mais um
+      <strong>ralo de ouro</strong> barato e frequente, do tipo que sempre tem o próximo pra querer.
+      E o melhor: reaproveita o sistema de roupa que eu já tenho, inteiro.
+    </p>
+  </section>
+
+  <section>
+    <h2>A boa notícia</h2>
+    <h3 class="sub">É só mais uma camada no boneco</h3>
+    <p>
+      Diferente da Casa, aqui <strong>não tem mecânica nova nenhuma</strong>. Meu boneco já é
+      desenhado em camadas (corpo, roupa, cabelo). Um acessório é só mais uma camada
+      por cima, no lugar certo. É o mesmo caminho de sempre: comprar na loja,
+      equipar, aparecer no personagem. Eu já fiz isso dezenas de vezes com roupa.
+    </p>
+  </section>
+
+  <section>
+    <h2>Como fica</h2>
+    <div class="mock">
+      <div class="mock__bar">
+        <div class="mock__title">
+          <svg width="18" height="18" viewBox="0 0 64 64" aria-hidden="true"><path d="M6 32 Q32 12 58 32 Q32 52 6 32 Z" fill="none" stroke="#a78bfa" stroke-width="3"/><circle cx="32" cy="32" r="4" fill="#a78bfa"/></svg>
+          Meu herói
+        </div>
+        <span class="mock__gold">◆ 1.240 ouro</span>
+      </div>
+      <div class="mock__stage">
+        <img alt="Personagem com cartola, óculos e brinco" src="data:image/png;base64,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">
+      </div>
+      <div class="mock__furnish">
+        <span class="mock__label">Acessórios equipados</span>
+        <div class="chips">
+          <span class="chip chip--on">Cartola</span>
+          <span class="chip chip--on">Óculos</span>
+          <span class="chip chip--on">Brinco</span>
+          <span class="chip">◆ 90</span>
+        </div>
+      </div>
+    </div>
+    <p class="cap">
+      Isso não é desenho: é o meu boneco de verdade com <strong style="color:#e6edf3">sprites reais</strong> de cartola,
+      óculos e brinco por cima. Cada acessório é uma camada nova, nada além disso.
+    </p>
+  </section>
+
+  <section>
+    <h2>A real, acessório por acessório</h2>
+    <p>O que muda de um pro outro não é o código, é ter (ou não) a arte pronta no acervo LPC gratuito.</p>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Acessório</th><th>No acervo LPC</th><th>Situação</th></tr></thead>
+        <tbody>
+          <tr><td>Óculos</td><td>facial/glasses, várias cores</td><td><span class="st"><span class="dot dot--ok"></span>Pronto</span></td></tr>
+          <tr><td>Boné e chapéus</td><td>hat/* (cartola, bandana, viseira, capuz e muito mais)</td><td><span class="st"><span class="dot dot--ok"></span>Farto</span></td></tr>
+          <tr><td>Brincos</td><td>facial/earrings</td><td><span class="st"><span class="dot dot--ok"></span>Existe</span></td></tr>
+          <tr><td>Piercings</td><td>não tem categoria própria</td><td><span class="st"><span class="dot dot--warn"></span>Improviso ou arte custom</span></td></tr>
+          <tr><td>Tatuagens</td><td>não existe no LPC padrão</td><td><span class="st"><span class="dot dot--no"></span>Precisa de arte custom</span></td></tr>
+          <tr><td>De brinde</td><td>colares, máscaras, monóculo, barba/bigode</td><td><span class="st"><span class="dot dot--bonus"></span>Apareceram no acervo</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>
+      Resumo honesto: <strong>quatro dos seis já estão prontos</strong> (óculos, chapéus, bonés,
+      brincos). <strong>Piercing e tatuagem</strong> são a exceção: o acervo não cobre bem, então
+      ou eu improviso, ou desenho/encomendo a arte. São a única parte trabalhosa.
+    </p>
+  </section>
+
+  <section>
+    <h2>O único trabalho de verdade</h2>
+    <ul class="list">
+      <li><strong>Ordem das camadas.</strong> Cada acessório entra num lugar certo: tatuagem colada no corpo e por baixo da roupa, óculos por cima do rosto, chapéu por cima do cabelo. É um ajuste pequeno no meu <code>buildLayers</code>.</li>
+      <li><strong>A arte de piercing e tatuagem.</strong> É o que o acervo não me dá de graça. O resto é reaproveitamento.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Modelo de dados</h2>
+    <p>Extensão direta do que eu já faço com roupa. Cada acessório é um slot novo.</p>
+    <pre><span class="c"># novos slots no personagem (igual torso / legs / feet)</span>
+<span class="k">character</span>.head     <span class="c"># chapéu / boné</span>
+<span class="k">character</span>.face     <span class="c"># óculos / máscara</span>
+<span class="k">character</span>.ears     <span class="c"># brinco</span>
+<span class="k">character</span>.tattoo   <span class="c"># tatuagem (por baixo da roupa)</span>
+
+<span class="c"># no catálogo, é só mais um item de loja com slot novo</span>
+{ id, label, preço, slot: "head" | "face" | "ears" | "tattoo", path }</pre>
+  </section>
+
+  <section>
+    <h2>Meu plano</h2>
+    <h3 class="sub">Do pronto pro trabalhoso</h3>
+    <div class="phases">
+      <div class="phase phase--f1">
+        <div class="phase__head"><span class="phase__no">FASE 1</span><span class="phase__name">Óculos e chapéus</span><span class="phase__cost low">Complexidade baixa</span></div>
+        <p>Os slots <code>face</code> e <code>head</code>, com o acervo que já existe e é farto. Reaproveita a loja e o equipar inteiros. Entrega muita expressão quase de graça.</p>
+      </div>
+      <div class="phase phase--f2">
+        <div class="phase__head"><span class="phase__no">FASE 2</span><span class="phase__name">Brincos e colares</span><span class="phase__cost low">Complexidade baixa</span></div>
+        <p>O slot <code>ears</code> e, de brinde, colares no pescoço. Mais opções de estilo, mesmo esforço mínimo. Só cuidar da ordem das camadas com o cabelo.</p>
+      </div>
+      <div class="phase phase--f3">
+        <div class="phase__head"><span class="phase__no">FASE 3</span><span class="phase__name">Piercings e tatuagens</span><span class="phase__cost mid">Custo = arte</span></div>
+        <p>Aqui o código continua fácil, mas eu preciso arrumar a arte (o acervo não tem). Fica pro fim, quando eu decidir se desenho, encomendo ou adio.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Minha decisão</h2>
+    <p>
+      Começo pela <strong>Fase 1</strong> (óculos e chapéus). É praticamente de graça: mesmo sistema
+      da roupa, arte pronta e farta. Entrega expressão imediata pro personagem. Brincos
+      vêm logo atrás. Piercing e tatuagem eu deixo pro momento em que eu resolver a
+      questão da arte, sem travar o resto.
+    </p>
+  </section>
+
+  <footer>
+    attention! &middot; planejamento de Acessórios &middot; rascunho vivo, vou mexendo conforme decido.
+  </footer>
+
+</div>
