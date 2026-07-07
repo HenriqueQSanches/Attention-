@@ -1,0 +1,417 @@
+<style>
+  :root{
+    --bg:#0e1116; --surface:#161b22; --surface-2:#1c2330; --border:#232a33; --border-soft:#1e242c;
+    --text:#e6edf3; --muted:#8b949e; --faint:#5a626d; --accent:#6366f1; --violet:#a78bfa; --amber:#d99a2b;
+    --ok:#6ee7a8; --warn:#d99a2b; --no:#f3a9b4;
+    --sans:ui-sans-serif,system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --mono:ui-monospace,"Cascadia Code","SF Mono",Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:radial-gradient(1200px 600px at 50% -200px,rgba(99,102,241,0.10),transparent 70%),var(--bg);color:var(--text);font-family:var(--sans);line-height:1.65;-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:760px;margin:0 auto;padding:56px 22px 96px;}
+  .brand{display:flex;align-items:center;gap:10px;}
+  .brand__word{font-size:17px;font-weight:700;letter-spacing:.01em;color:var(--accent);}
+  .eyebrow{margin:30px 0 0;font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);}
+  h1{margin:10px 0 0;font-size:38px;font-weight:700;letter-spacing:-.025em;line-height:1.08;text-wrap:balance;}
+  .lede{margin:14px 0 0;font-size:17px;color:var(--muted);max-width:60ch;}
+  .meta{margin:22px 0 0;display:flex;flex-wrap:wrap;gap:8px 10px;}
+  .tag{font-family:var(--mono);font-size:11.5px;color:var(--muted);background:var(--surface-2);border:1px solid var(--border);border-radius:999px;padding:4px 10px;}
+  .tag--live{color:var(--violet);border-color:rgba(167,139,250,.35);}
+  hr.rule{border:0;border-top:1px solid var(--border-soft);margin:44px 0;}
+  h2{margin:0 0 4px;font-size:13px;font-family:var(--mono);font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--violet);}
+  section{margin-top:40px;}
+  h3.sub{margin:0;font-size:22px;font-weight:650;letter-spacing:-.01em;}
+  p{margin:12px 0 0;} p,li{max-width:64ch;}
+  strong{color:#fff;font-weight:650;}
+  ul.list{margin:12px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:10px;}
+  ul.list li{position:relative;padding-left:22px;}
+  ul.list li::before{content:"";position:absolute;left:4px;top:10px;width:6px;height:6px;border-radius:50%;background:var(--accent);}
+  blockquote{margin:16px 0 0;padding:18px 20px;background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--violet);border-radius:12px;font-size:18px;color:#f0f2f7;}
+  code{font-family:var(--mono);color:#cbd3de;}
+
+  .mock{margin:18px 0 0;background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:16px;box-shadow:0 24px 60px rgba(0,0,0,.45);}
+  .mock__bar{display:flex;align-items:center;justify-content:space-between;padding:2px 4px 12px;}
+  .mock__title{display:flex;align-items:center;gap:8px;font-weight:650;font-size:15px;}
+  .mock__gold{font-family:var(--mono);font-size:12px;color:var(--amber);background:rgba(217,154,43,.10);border:1px solid rgba(217,154,43,.25);padding:3px 9px;border-radius:999px;}
+  .mock__stage{display:flex;align-items:flex-end;justify-content:center;gap:18px;padding:22px 14px 16px;border-radius:12px;
+    background:radial-gradient(220px 120px at 50% 80%,rgba(167,139,250,.14),transparent 70%),#161b22;
+    border-bottom:2px solid #232a33;}
+  .mock__stage img{width:150px;height:150px;image-rendering:pixelated;}
+  .mock__stage svg{width:104px;height:104px;}
+  .mock__furnish{margin-top:14px;}
+  .mock__label{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);}
+  .chips{margin-top:8px;display:flex;flex-wrap:wrap;gap:8px;}
+  .chip{font-size:13px;color:var(--muted);background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:7px 12px;display:inline-flex;align-items:center;gap:8px;}
+  .chip--on{color:#fff;border-color:var(--violet);background:rgba(167,139,250,.12);}
+  .cap{margin:12px 2px 0;font-size:13px;color:var(--faint);}
+
+  .zoo{margin-top:16px;display:grid;grid-template-columns:repeat(5,1fr);gap:10px;}
+  @media(max-width:640px){.zoo{grid-template-columns:repeat(3,1fr);}}
+  @media(max-width:400px){.zoo{grid-template-columns:repeat(2,1fr);}}
+  .pet{position:relative;background:var(--surface-2);border:1px solid var(--border);border-radius:12px;padding:8px 6px 6px;text-align:center;}
+  .pet svg{width:100%;height:auto;display:block;}
+  .pet__name{margin-top:2px;font-size:12px;font-weight:600;color:var(--text);}
+  .pet--fav{border-color:rgba(167,139,250,.55);background:rgba(167,139,250,.08);}
+  .pet__star{position:absolute;top:6px;right:8px;font-size:11px;color:var(--violet);}
+
+  .tablewrap{margin-top:14px;overflow-x:auto;border:1px solid var(--border);border-radius:14px;}
+  table{width:100%;border-collapse:collapse;font-size:14.5px;min-width:480px;}
+  th,td{text-align:left;padding:12px 16px;border-bottom:1px solid var(--border-soft);vertical-align:top;}
+  thead th{font-family:var(--mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600;}
+  tbody tr:last-child td{border-bottom:0;}
+  td:first-child{color:var(--muted);}
+  td.arrow{color:var(--violet);} td:last-child{color:#fff;font-weight:600;}
+
+  .phases{margin-top:16px;display:flex;flex-direction:column;gap:14px;}
+  .phase{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:20px;position:relative;overflow:hidden;}
+  .phase::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--accent);}
+  .phase--f1::before{background:var(--ok);} .phase--f2::before{background:var(--violet);} .phase--f3::before{background:var(--amber);}
+  .phase__head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;}
+  .phase__no{font-family:var(--mono);font-size:12px;color:var(--muted);letter-spacing:.1em;}
+  .phase__name{font-size:18px;font-weight:650;}
+  .phase__cost{margin-left:auto;font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;padding:3px 9px;border-radius:999px;border:1px solid var(--border);color:var(--muted);}
+  .phase__cost.low{color:var(--ok);border-color:rgba(110,231,168,.3);}
+  .phase__cost.mid{color:var(--amber);border-color:rgba(217,154,43,.3);}
+  .phase p{font-size:14.5px;color:var(--muted);margin-top:10px;}
+
+  pre{margin:14px 0 0;overflow-x:auto;background:#0b0e13;border:1px solid var(--border);border-radius:12px;padding:16px 18px;font-family:var(--mono);font-size:12.5px;line-height:1.7;color:#cbd3de;}
+  pre .c{color:var(--faint);} pre .k{color:var(--violet);}
+  footer{margin-top:56px;padding-top:22px;border-top:1px solid var(--border-soft);color:var(--faint);font-size:13px;}
+</style>
+
+<div class="wrap">
+
+  <div class="brand">
+    <svg width="26" height="26" viewBox="0 0 64 64" aria-hidden="true">
+      <defs><radialGradient id="iris" cx="50%" cy="56%" r="62%"><stop offset="0%" stop-color="#c4b5fd"/><stop offset="55%" stop-color="#8b5cf6"/><stop offset="100%" stop-color="#4f46e5"/></radialGradient></defs>
+      <path d="M6 32 Q32 12 58 32 Q32 52 6 32 Z" fill="#0e1116"/>
+      <circle cx="32" cy="32" r="15" fill="url(#iris)"/><circle cx="32" cy="32" r="4.6" fill="#0b0e13"/><circle cx="30.2" cy="30.2" r="1.5" fill="#fff"/>
+      <path d="M6 32 Q32 12 58 32 Q32 52 6 32 Z" fill="none" stroke="#e6edf3" stroke-opacity=".9" stroke-width="2"/>
+    </svg>
+    <span class="brand__word">Attention!</span>
+  </div>
+
+  <p class="eyebrow">Documento de planejamento</p>
+  <h1>Pet companheiro</h1>
+  <p class="lede">
+    Um bicho de estimação de verdade, ao lado do meu herói. Comprável, colecionável,
+    só meu. Já tenho o elenco fechado: dez bichos, com Raposa e Cobra na frente. E, de
+    quebra, isso arruma uma confusão de nomes que eu mesmo criei.
+  </p>
+  <div class="meta">
+    <span class="tag">Autor: Henrique</span>
+    <span class="tag">Projeto: attention!</span>
+    <span class="tag tag--live">Status: rascunho, nada codado ainda</span>
+  </div>
+
+  <hr class="rule" />
+
+  <section>
+    <h2>Primeiro, um acerto de nomes</h2>
+    <p>
+      Hoje eu chamo de "pet" o robozinho que quebra minhas tarefas (a Iris). Só que
+      a Iris não é um bicho, é a minha <strong>assistente</strong>. Então eu vou libertar a palavra
+      "pet": ela passa a ser um <strong>bicho de estimação</strong> de verdade, e a Iris fica sendo o
+      que ela sempre foi, a assistente que me ajuda a focar.
+    </p>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Hoje se chama</th><th></th><th>Passa a ser</th></tr></thead>
+        <tbody>
+          <tr><td>"Pet" (o robô Iris que quebra tarefas)</td><td class="arrow">vira</td><td>Assistente (Iris)</td></tr>
+          <tr><td>Aba "Mascotes" (skins do robô)</td><td class="arrow">vira</td><td>Aparências da Iris</td></tr>
+          <tr><td>a palavra "Pet", agora livre</td><td class="arrow">vira</td><td>Bicho de estimação ao lado do herói</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>O que é o pet</h2>
+    <p>
+      Um bichinho (gato, cachorro, raposa, slime, o que eu quiser desenhar) que fica
+      <strong>ao lado do herói</strong> na tela inicial. É cosmético: não muda XP nem quest, é
+      companhia e identidade. Comprável com ouro, colecionável, e talvez com nome que eu escolho.
+      Mais um motivo pra continuar focando depois de já ter roupa, casa e acessório.
+    </p>
+  </section>
+
+  <section>
+    <h2>Como fica</h2>
+    <div class="mock">
+      <div class="mock__bar">
+        <div class="mock__title">
+          <svg width="18" height="18" viewBox="0 0 64 64" aria-hidden="true"><path d="M6 32 Q32 12 58 32 Q32 52 6 32 Z" fill="none" stroke="#a78bfa" stroke-width="3"/><circle cx="32" cy="32" r="4" fill="#a78bfa"/></svg>
+          Início
+        </div>
+        <span class="mock__gold">◆ 1.240 ouro</span>
+      </div>
+      <div class="mock__stage">
+        <img alt="Meu herói" src="data:image/png;base64,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">
+        <svg viewBox="0 0 110 110" role="img" aria-label="Pet raposa">
+          <ellipse cx="55" cy="99" rx="33" ry="6" fill="#000" opacity="0.28"/>
+          <path d="M78 92 C101 88 105 58 87 50 C96 70 84 84 70 87 Z" fill="#c9762a"/>
+          <path d="M91 53 C100 62 100 75 91 83 C96 72 94 62 87 55 Z" fill="#f0e6d2"/>
+          <path d="M55 50 C74 50 82 74 78 90 C70 96 40 96 32 90 C28 74 36 50 55 50 Z" fill="#d98a3a"/>
+          <path d="M55 66 C64 66 68 82 66 90 C60 93 50 93 44 90 C42 82 46 66 55 66 Z" fill="#f0e6d2"/>
+          <circle cx="55" cy="44" r="26" fill="#d98a3a"/>
+          <path d="M34 30 L30 8 L50 24 Z" fill="#d98a3a"/>
+          <path d="M76 30 L80 8 L60 24 Z" fill="#d98a3a"/>
+          <path d="M36 27 L34 15 L46 25 Z" fill="#8a4a2a"/>
+          <path d="M74 27 L76 15 L64 25 Z" fill="#8a4a2a"/>
+          <path d="M55 40 C64 40 66 54 55 60 C44 54 46 40 55 40 Z" fill="#f4ede0"/>
+          <circle cx="46" cy="42" r="3.4" fill="#2a1f18"/>
+          <circle cx="64" cy="42" r="3.4" fill="#2a1f18"/>
+          <circle cx="45" cy="41" r="1.1" fill="#fff"/>
+          <circle cx="63" cy="41" r="1.1" fill="#fff"/>
+          <path d="M52 52 L58 52 L55 57 Z" fill="#2a1f18"/>
+          <ellipse cx="44" cy="92" rx="7" ry="5" fill="#c9762a"/>
+          <ellipse cx="66" cy="92" rx="7" ry="5" fill="#c9762a"/>
+        </svg>
+      </div>
+      <div class="mock__furnish">
+        <span class="mock__label">Do meu jeito</span>
+        <div class="chips">
+          <span class="chip chip--on">Pet: Raposa</span>
+          <span class="chip">Assistente: Iris</span>
+          <span class="chip">◆ 300</span>
+        </div>
+      </div>
+    </div>
+    <p class="cap">
+      O herói é sprite de verdade; a raposa aqui é um <strong style="color:#e6edf3">rascunho meu</strong> só pra ilustrar a
+      posição. Repara que <strong style="color:#e6edf3">pet</strong> e <strong style="color:#e6edf3">assistente</strong> são coisas separadas: um é o bicho ao lado,
+      o outro é a Iris que me ajuda nas tarefas.
+    </p>
+  </section>
+
+  <section>
+    <h2>O elenco</h2>
+    <h3 class="sub">Os dez bichos que eu quero</h3>
+    <p>Rascunhos meus pra fechar a lista. Raposa e Cobra são as minhas favoritas.</p>
+    <div class="zoo">
+
+      <div class="pet pet--fav"><span class="pet__star">★</span>
+        <svg viewBox="0 0 100 100" aria-label="Raposa">
+          <ellipse cx="50" cy="93" rx="27" ry="5" fill="#000" opacity=".28"/>
+          <path d="M70 84 C90 80 93 55 78 48 C86 66 74 78 63 80 Z" fill="#c9762a"/>
+          <path d="M82 51 C89 59 89 70 82 77 C86 67 84 58 78 53 Z" fill="#f0e6d2"/>
+          <path d="M50 46 C66 46 73 68 70 82 C62 88 38 88 30 82 C27 68 34 46 50 46 Z" fill="#d98a3a"/>
+          <path d="M50 60 C58 60 61 74 59 82 C54 85 46 85 41 82 C39 74 42 60 50 60 Z" fill="#f0e6d2"/>
+          <circle cx="50" cy="40" r="23" fill="#d98a3a"/>
+          <path d="M31 28 L27 8 L45 22 Z" fill="#d98a3a"/><path d="M69 28 L73 8 L55 22 Z" fill="#d98a3a"/>
+          <path d="M33 25 L31 13 L42 23 Z" fill="#7a3f24"/><path d="M67 25 L69 13 L58 23 Z" fill="#7a3f24"/>
+          <path d="M50 37 C58 37 60 49 50 55 C40 49 42 37 50 37 Z" fill="#f4ede0"/>
+          <circle cx="42" cy="38" r="3" fill="#26201a"/><circle cx="58" cy="38" r="3" fill="#26201a"/>
+          <circle cx="41" cy="37" r="1" fill="#fff"/><circle cx="57" cy="37" r="1" fill="#fff"/>
+          <path d="M47 47 L53 47 L50 51 Z" fill="#26201a"/>
+        </svg>
+        <div class="pet__name">Raposa</div>
+      </div>
+
+      <div class="pet">
+        <svg viewBox="0 0 100 100" aria-label="Lobo">
+          <ellipse cx="50" cy="93" rx="27" ry="5" fill="#000" opacity=".28"/>
+          <path d="M28 82 C10 82 8 62 22 58 C18 70 26 78 37 79 Z" fill="#5b6472"/>
+          <path d="M50 46 C67 46 74 68 71 82 C62 88 38 88 29 82 C26 68 33 46 50 46 Z" fill="#79828f"/>
+          <path d="M50 60 C58 60 61 74 59 82 C54 85 46 85 41 82 C39 74 42 60 50 60 Z" fill="#c3c9d2"/>
+          <circle cx="50" cy="40" r="23" fill="#79828f"/>
+          <path d="M31 27 L26 9 L45 21 Z" fill="#79828f"/><path d="M69 27 L74 9 L55 21 Z" fill="#79828f"/>
+          <path d="M33 24 L30 14 L42 22 Z" fill="#4a515c"/><path d="M67 24 L70 14 L58 22 Z" fill="#4a515c"/>
+          <path d="M50 37 C58 37 60 50 50 56 C40 50 42 37 50 37 Z" fill="#c3c9d2"/>
+          <circle cx="42" cy="38" r="3" fill="#2a2f38"/><circle cx="58" cy="38" r="3" fill="#2a2f38"/>
+          <circle cx="41" cy="37" r="1" fill="#fff"/><circle cx="57" cy="37" r="1" fill="#fff"/>
+          <path d="M47 48 L53 48 L50 52 Z" fill="#2a2f38"/>
+        </svg>
+        <div class="pet__name">Lobo</div>
+      </div>
+
+      <div class="pet">
+        <svg viewBox="0 0 100 100" aria-label="Morcego">
+          <ellipse cx="50" cy="93" rx="20" ry="4" fill="#000" opacity=".28"/>
+          <path d="M42 52 C24 40 8 46 4 60 C16 54 20 60 22 66 C26 60 32 58 42 62 Z" fill="#4a4258"/>
+          <path d="M58 52 C76 40 92 46 96 60 C84 54 80 60 78 66 C74 60 68 58 58 62 Z" fill="#4a4258"/>
+          <ellipse cx="50" cy="62" rx="16" ry="18" fill="#5a5168"/>
+          <ellipse cx="50" cy="66" rx="9" ry="11" fill="#726a80"/>
+          <circle cx="50" cy="46" r="15" fill="#5a5168"/>
+          <path d="M40 34 L34 20 L48 32 Z" fill="#5a5168"/><path d="M60 34 L66 20 L52 32 Z" fill="#5a5168"/>
+          <circle cx="44" cy="46" r="3.2" fill="#1f1b26"/><circle cx="56" cy="46" r="3.2" fill="#1f1b26"/>
+          <circle cx="43" cy="45" r="1.1" fill="#c4b5fd"/><circle cx="55" cy="45" r="1.1" fill="#c4b5fd"/>
+          <path d="M46 53 L48 57 L45 57 Z" fill="#fff"/><path d="M54 53 L52 57 L55 57 Z" fill="#fff"/>
+        </svg>
+        <div class="pet__name">Morcego</div>
+      </div>
+
+      <div class="pet">
+        <svg viewBox="0 0 100 100" aria-label="Coruja">
+          <ellipse cx="50" cy="93" rx="24" ry="5" fill="#000" opacity=".28"/>
+          <path d="M50 30 C70 30 76 60 72 78 C64 88 36 88 28 78 C24 60 30 30 50 30 Z" fill="#9a6f3e"/>
+          <path d="M50 46 C62 46 66 66 63 78 C57 84 43 84 37 78 C34 66 38 46 50 46 Z" fill="#c99c63"/>
+          <path d="M42 62 L50 68 L58 62" stroke="#9a6f3e" stroke-width="2" fill="none"/>
+          <path d="M42 70 L50 76 L58 70" stroke="#9a6f3e" stroke-width="2" fill="none"/>
+          <path d="M32 30 L28 15 L41 26 Z" fill="#9a6f3e"/><path d="M68 30 L72 15 L59 26 Z" fill="#9a6f3e"/>
+          <circle cx="40" cy="42" r="11" fill="#f4ede0"/><circle cx="60" cy="42" r="11" fill="#f4ede0"/>
+          <circle cx="40" cy="43" r="6" fill="#26201a"/><circle cx="60" cy="43" r="6" fill="#26201a"/>
+          <circle cx="42" cy="41" r="1.8" fill="#fff"/><circle cx="62" cy="41" r="1.8" fill="#fff"/>
+          <path d="M50 48 L46 54 L54 54 Z" fill="#d99a2b"/>
+          <path d="M44 85 l-2 5 M48 86 l0 5 M52 86 l0 5 M56 85 l2 5" stroke="#d99a2b" stroke-width="2"/>
+        </svg>
+        <div class="pet__name">Coruja</div>
+      </div>
+
+      <div class="pet">
+        <svg viewBox="0 0 100 100" aria-label="Corvo">
+          <ellipse cx="50" cy="93" rx="22" ry="5" fill="#000" opacity=".28"/>
+          <path d="M34 58 C34 42 50 36 62 42 C78 50 74 74 58 82 C44 88 34 76 34 58 Z" fill="#2c2836"/>
+          <path d="M34 60 C22 62 16 70 18 78 C26 74 32 74 40 74 Z" fill="#2c2836"/>
+          <path d="M56 52 C70 52 74 68 64 78 C60 66 52 60 48 60 Z" fill="#211d29"/>
+          <circle cx="60" cy="42" r="13" fill="#2c2836"/>
+          <path d="M71 40 L88 42 L71 47 Z" fill="#c9a24a"/>
+          <circle cx="62" cy="40" r="4.5" fill="#a78bfa"/><circle cx="62" cy="40" r="2.2" fill="#1a1720"/><circle cx="61" cy="39" r=".9" fill="#fff"/>
+          <path d="M48 82 l0 8 M54 82 l0 8" stroke="#c9a24a" stroke-width="2.4"/>
+        </svg>
+        <div class="pet__name">Corvo</div>
+      </div>
+
+      <div class="pet">
+        <svg viewBox="0 0 100 100" aria-label="Cachorro">
+          <ellipse cx="50" cy="93" rx="27" ry="5" fill="#000" opacity=".28"/>
+          <path d="M50 48 C66 48 72 70 69 82 C60 88 40 88 31 82 C28 70 34 48 50 48 Z" fill="#c98f4f"/>
+          <path d="M50 62 C57 62 60 75 58 82 C53 85 47 85 42 82 C40 75 43 62 50 62 Z" fill="#e6cfaa"/>
+          <circle cx="50" cy="42" r="22" fill="#c98f4f"/>
+          <path d="M30 34 C20 34 18 54 28 58 C34 52 33 40 34 34 Z" fill="#a06a30"/>
+          <path d="M70 34 C80 34 82 54 72 58 C66 52 67 40 66 34 Z" fill="#a06a30"/>
+          <ellipse cx="50" cy="48" rx="12" ry="9" fill="#e6cfaa"/>
+          <circle cx="42" cy="40" r="3" fill="#2a1f18"/><circle cx="58" cy="40" r="3" fill="#2a1f18"/>
+          <circle cx="41" cy="39" r="1" fill="#fff"/><circle cx="57" cy="39" r="1" fill="#fff"/>
+          <ellipse cx="50" cy="46" rx="3.5" ry="2.6" fill="#2a1f18"/>
+          <path d="M47 52 C47 60 53 60 53 52 Z" fill="#e88aa0"/>
+        </svg>
+        <div class="pet__name">Cachorro</div>
+      </div>
+
+      <div class="pet">
+        <svg viewBox="0 0 100 100" aria-label="Gato">
+          <ellipse cx="50" cy="93" rx="26" ry="5" fill="#000" opacity=".28"/>
+          <path d="M72 82 C88 80 90 64 78 62 C84 70 78 76 68 76 Z" fill="#8b8f99"/>
+          <path d="M50 48 C65 48 71 70 68 82 C60 88 40 88 32 82 C29 70 35 48 50 48 Z" fill="#9aa0aa"/>
+          <path d="M50 62 C57 62 60 75 58 82 C53 85 47 85 42 82 C40 75 43 62 50 62 Z" fill="#d3d7de"/>
+          <circle cx="50" cy="42" r="21" fill="#9aa0aa"/>
+          <path d="M33 30 L30 14 L45 24 Z" fill="#9aa0aa"/><path d="M67 30 L70 14 L55 24 Z" fill="#9aa0aa"/>
+          <path d="M35 27 L33 17 L43 25 Z" fill="#e88aa0"/><path d="M65 27 L67 17 L57 25 Z" fill="#e88aa0"/>
+          <circle cx="42" cy="42" r="3.2" fill="#3a5a3a"/><circle cx="58" cy="42" r="3.2" fill="#3a5a3a"/>
+          <circle cx="41" cy="41" r="1" fill="#fff"/><circle cx="57" cy="41" r="1" fill="#fff"/>
+          <path d="M48 48 L52 48 L50 51 Z" fill="#e88aa0"/>
+          <path d="M50 50 L32 47 M50 52 L32 55 M50 50 L68 47 M50 52 L68 55" stroke="#d3d7de" stroke-width="1"/>
+        </svg>
+        <div class="pet__name">Gato</div>
+      </div>
+
+      <div class="pet">
+        <svg viewBox="0 0 100 100" aria-label="Furão">
+          <ellipse cx="50" cy="92" rx="30" ry="5" fill="#000" opacity=".28"/>
+          <path d="M18 74 C18 62 30 58 44 60 C60 62 84 60 88 72 C90 82 74 84 56 82 C40 80 18 84 18 74 Z" fill="#e6d8b8"/>
+          <path d="M84 70 C96 66 98 78 88 80 C86 74 86 72 84 72 Z" fill="#8a6f4a"/>
+          <rect x="34" y="78" width="5" height="10" rx="2" fill="#8a6f4a"/><rect x="60" y="78" width="5" height="10" rx="2" fill="#8a6f4a"/>
+          <circle cx="26" cy="66" r="15" fill="#e6d8b8"/>
+          <path d="M17 56 L14 47 L24 54 Z" fill="#e6d8b8"/><path d="M35 56 L38 47 L28 54 Z" fill="#e6d8b8"/>
+          <path d="M16 64 C20 60 32 60 36 64 C34 70 18 70 16 64 Z" fill="#5a4636"/>
+          <circle cx="21" cy="65" r="2.6" fill="#1f1a14"/><circle cx="31" cy="65" r="2.6" fill="#1f1a14"/>
+          <circle cx="20.3" cy="64.3" r=".9" fill="#fff"/><circle cx="30.3" cy="64.3" r=".9" fill="#fff"/>
+          <ellipse cx="26" cy="72" rx="3" ry="2.2" fill="#2a1f18"/>
+        </svg>
+        <div class="pet__name">Furão</div>
+      </div>
+
+      <div class="pet">
+        <svg viewBox="0 0 100 100" aria-label="Lagarto">
+          <ellipse cx="50" cy="92" rx="30" ry="5" fill="#000" opacity=".28"/>
+          <path d="M20 74 C6 76 2 68 10 64 C14 70 18 72 26 72 Z" fill="#4e8f4e"/>
+          <path d="M22 72 C22 60 40 56 56 60 C74 64 82 60 84 56 C88 62 82 74 62 76 C44 78 22 82 22 72 Z" fill="#5aa15a"/>
+          <path d="M40 58 l3 -6 l3 6 Z M50 57 l3 -6 l3 6 Z M60 58 l3 -6 l3 6 Z" fill="#3f7a3f"/>
+          <path d="M34 74 l-4 10 M44 76 l-2 10 M60 74 l4 10 M70 72 l3 10" stroke="#3f7a3f" stroke-width="3" stroke-linecap="round"/>
+          <path d="M78 54 C90 52 92 64 82 66 C74 66 72 58 78 54 Z" fill="#5aa15a"/>
+          <circle cx="82" cy="58" r="2.6" fill="#1f2a1a"/><circle cx="81" cy="57" r=".9" fill="#fff"/>
+          <path d="M88 60 L95 61" stroke="#d94a4a" stroke-width="1.4"/>
+        </svg>
+        <div class="pet__name">Lagarto</div>
+      </div>
+
+      <div class="pet pet--fav"><span class="pet__star">★</span>
+        <svg viewBox="0 0 100 100" aria-label="Cobra">
+          <ellipse cx="50" cy="93" rx="26" ry="5" fill="#000" opacity=".28"/>
+          <path d="M22 84 C10 74 18 58 34 60 C48 62 52 74 42 78 C36 80 30 76 32 70 C34 66 40 66 40 70" fill="none" stroke="#4a9a5a" stroke-width="12" stroke-linecap="round"/>
+          <path d="M40 72 C44 58 40 44 52 36 C62 30 70 34 68 44" fill="none" stroke="#4a9a5a" stroke-width="12" stroke-linecap="round"/>
+          <path d="M22 84 C10 74 18 58 34 60" fill="none" stroke="#cfe0a0" stroke-width="4" stroke-linecap="round" opacity=".6"/>
+          <path d="M60 34 C72 32 76 44 66 48 C58 48 54 40 60 34 Z" fill="#4a9a5a"/>
+          <circle cx="66" cy="39" r="2.6" fill="#1f2a1a"/><circle cx="65" cy="38" r=".9" fill="#fff"/>
+          <path d="M74 42 L84 42 M84 42 l4 -2 M84 42 l4 2" stroke="#d94a4a" stroke-width="1.6" fill="none"/>
+        </svg>
+        <div class="pet__name">Cobra</div>
+      </div>
+
+    </div>
+    <p class="cap">Dez opções pra começar. A arte final (sprites de verdade) vem depois; isto aqui é só o elenco pra eu bater o martelo.</p>
+  </section>
+
+  <section>
+    <h2>É difícil?</h2>
+    <p>
+      O código é <strong>fácil</strong>: renderizar o pet é só desenhar mais um sprite ao lado do herói,
+      e o meu <code>CharacterCanvas</code> já desenha sprites. O acerto de nomes é só trocar rótulos.
+    </p>
+    <p>
+      O ponto de atenção, como sempre, é a <strong>arte</strong>: o gerador de personagem que eu usei
+      pra roupa e acessório <strong>não tem animais</strong>. Sprites de bicho no estilo LPC existem em
+      packs separados (OpenGameArt), então dá mais garimpo que roupa. A animação de "respirar"
+      ou pular é opcional e fica pra uma fase depois.
+    </p>
+  </section>
+
+  <section>
+    <h2>Modelo de dados</h2>
+    <p>Mesmo padrão de tudo. O pet é um slot novo; a Iris só troca de rótulo.</p>
+    <pre><span class="c"># a Iris (hoje "pet") vira assistente: só relabel, mantenho as colunas</span>
+<span class="k">character</span>.assistant        <span class="c"># era .pet (skins da Iris)</span>
+<span class="k">owned_assistants</span>
+
+<span class="c"># o pet de verdade, novo</span>
+<span class="k">character</span>.companion        <span class="c"># bicho ativo ao lado do herói</span>
+<span class="k">owned_companions</span>          <span class="c"># bichos comprados</span>
+
+<span class="c"># catálogo: mais um item de loja</span>
+{ id, nome, preço, tier, path }   <span class="c"># na aba "Pets"</span></pre>
+  </section>
+
+  <section>
+    <h2>Meu plano</h2>
+    <div class="phases">
+      <div class="phase phase--f1">
+        <div class="phase__head"><span class="phase__no">FASE 1</span><span class="phase__name">Renomear + estrear o elenco</span><span class="phase__cost low">Complexidade baixa</span></div>
+        <p>Acerto os nomes (Iris = assistente) e estreio com as minhas favoritas (Raposa e Cobra) mais uma ou duas, que aparecem ao lado do herói na tela inicial. Aba "Pets" nova na loja, e vou soltando o resto dos dez conforme a arte fica pronta.</p>
+      </div>
+      <div class="phase phase--f2">
+        <div class="phase__head"><span class="phase__no">FASE 2</span><span class="phase__name">Mais bichos + animação</span><span class="phase__cost low">Complexidade baixa</span></div>
+        <p>Mais opções de pet e uma animação de "respirar" ou pulinho pra ele parecer vivo. O custo aqui é achar/fazer os sprites, não o código.</p>
+      </div>
+      <div class="phase phase--f3">
+        <div class="phase__head"><span class="phase__no">FASE 3</span><span class="phase__name">Pet que reage (talvez)</span><span class="phase__cost mid">Complexidade média</span></div>
+        <p>O pet segue o herói, comemora quando eu concluo uma quest, dorme quando eu não uso. Charme extra, fica pro fim.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Minha decisão</h2>
+    <p>
+      Começo pela <strong>Fase 1</strong>: primeiro o acerto de nomes (rápido e importante pra não me
+      confundir depois), e aí 2 ou 3 pets estáticos ao lado do herói. É companhia imediata,
+      código fácil, e o único trabalho de verdade é garimpar a arte dos bichos.
+    </p>
+  </section>
+
+  <footer>
+    attention! &middot; planejamento de Pet companheiro &middot; rascunho vivo, vou mexendo conforme decido.
+  </footer>
+
+</div>
