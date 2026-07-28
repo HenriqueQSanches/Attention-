@@ -90,9 +90,23 @@
     <span class="tag">Autor: Henrique</span>
     <span class="tag">Projeto: attention!</span>
     <span class="tag tag--live">Índice dos planos em docs/</span>
+    <span class="tag">Atualizado em 28/07/2026</span>
   </div>
 
   <hr class="rule" />
+
+  <section>
+    <h2>Onde eu estou agora</h2>
+    <p>
+      Antes de tocar nas três frentes, entrou uma feature que não estava neste doc e que veio
+      de dor minha, não de vontade de enfeitar o boneco: o <strong>Pergaminho</strong>.
+    </p>
+    <ul class="list">
+      <li><strong>Pergaminho de recados: feito.</strong> Quinta tela do app. Eu esqueço o que as pessoas me pedem, e recado não é quest (quest eu escolho, recado chega de fora). São linhas numeradas em folha de pergaminho, com título e descrição, e ticar como lembrado rende 1 ouro. Duas regras que eu cravei: o ouro só sai na primeira ticada (coluna <code>rewarded</code>, senão eu farmava ouro reticando) e a ordem é fixa, a linha ticada fica no lugar riscada, porque papel não reordena.</li>
+      <li><strong>Torneira nova de ouro pede ralo novo.</strong> O Pergaminho gera ouro todo dia, e hoje só existem roupa e Arauto pra gastar. Isso reforça começar pelos Acessórios, que é ralo barato de fazer.</li>
+      <li><strong>Acessórios, Fase 1: feita.</strong> Óculos e chapéus já estão na Loja, num modo próprio, com os slots <code>head</code> e <code>face</code> no personagem. O ralo de ouro está aberto. Detalhe do acervo que ajudou: acessório no LPC é arte <code>adult</code>, uma folha serve pros dois sexos.</li>
+    </ul>
+  </section>
 
   <section>
     <h2>As três frentes</h2>
@@ -127,8 +141,8 @@
       <div class="step">
         <div class="step__rail"><div class="step__num step__num--1">1</div><div class="step__line"></div></div>
         <div class="step__body">
-          <div class="step__name">Acessórios</div>
-          <div class="step__why">O mais barato de todos. Sem mecânica nova, é só mais camada no boneco, e 4 dos 6 já têm arte pronta. Começo ganhando com pouco esforço.</div>
+          <div class="step__name">Acessórios <span style="font-family:var(--mono);font-size:12px;color:var(--ok);letter-spacing:.06em;">FASE 1 FEITA</span></div>
+          <div class="step__why">O mais barato de todos. Sem mecânica nova, é só mais camada no boneco, e 4 dos 6 já têm arte pronta. Começo ganhando com pouco esforço. Óculos e chapéus entraram em 28/07/2026 (11 itens na Loja, modo "Acessórios" com abas Cabeça e Rosto). Falta a Fase 2, brincos e colares, e a Fase 3, piercing e tatuagem, que depende de arte.</div>
         </div>
       </div>
       <div class="step">
@@ -202,9 +216,47 @@
     <h2>Antes de ir pra produção</h2>
     <p>Housekeeping que não é feature, mas preciso lembrar antes de pensar em deploy ou PWA:</p>
     <ul class="list">
-      <li><strong>Consertar 2 erros de build antigos</strong> (Casa.tsx e NavBar.tsx) que travam o <code>pnpm build</code>. Não atrapalham o dia a dia, mas bloqueiam a produção.</li>
+      <li><strong>Os 2 erros de build: consertados.</strong> Casa.tsx passava props que o CharacterSprite não aceita (e por isso a tela Casa desenhava um herói genérico em vez do meu) e NavBar.tsx usava <code>JSX.Element</code>, que o React 19 tirou do escopo global. O <code>pnpm build</code> passa limpo agora, então produção não está mais bloqueada por isso.</li>
       <li><strong>Rename da Iris para Arauto: feito.</strong> Já separei a assistente do futuro pet, com a palavra "pet" livre pra usar no bicho.</li>
+      <li><strong>Falta o PWA em si:</strong> manifest, ícones e service worker. É o que transforma o site em app instalável na tela de início.</li>
     </ul>
+
+    <h3 class="sub" style="margin-top:26px;">O que eu entendi sobre levar pro iPhone</h3>
+    <p>
+      Eu achava que o SQLite fosse o problema pra rodar no celular. Não é. O SQLite continua
+      funcionando, ele só <strong>não mora no iPhone</strong>: o banco é um arquivo lido pelo Node,
+      e é o Node que faz conta de XP, ouro e nível. O celular roda navegador, não roda Node.
+      Então o que muda não é a tecnologia do banco, é o endereço onde ele fica.
+    </p>
+    <p>
+      Também não existe "arquivo" pra instalar no iPhone. Ou é App Store com conta paga de dev,
+      ou é <strong>PWA</strong>, que é o meu caminho: o Safari instala pela opção de adicionar à
+      tela de início. Não tem pacote pra transferir, tem uma URL.
+    </p>
+    <p>
+      Os dois caminhos possíveis quando eu chegar lá: <strong>hospedar a api com o SQLite</strong>
+      (o <code>db.js</code> não muda uma linha, a Iris continua viva porque a chave da Groq fica no
+      servidor, e o mesmo herói me acompanha no PC e no celular, exigindo hospedagem com disco
+      persistente senão o <code>.db</code> é zerado a cada deploy), ou <strong>guardar tudo no
+      navegador</strong> com IndexedDB, que dispensa servidor mas me obriga a reescrever no front
+      toda a regra de jogo que já está testada no <code>db.js</code> e me faz perder a Iris, porque
+      chave de API não pode ir pra dentro do celular. Escolhi o primeiro quando for a hora.
+      <strong>Decisão parada por ora: sigo desenvolvendo no PC e no navegador.</strong>
+    </p>
+  </section>
+
+  <section>
+    <h2>Buracos que ainda não têm plano</h2>
+    <p>Coisas que eu já sei que faltam, mas que ainda não viraram doc próprio:</p>
+    <ul class="list">
+      <li><strong>A Taverna é uma sala vazia.</strong> Ela está na navbar e só mostra a Cerveja do Herói travada com selo de "em breve". É a única tela do app que não faz nada.</li>
+      <li><strong>Falta o pilar 3 do protocolo: a recompensa agendada com contrato.</strong> Dos quatro pilares que viraram este produto, esse é o único que nunca foi codado (o 1 são as 3 quests do dia, o 2 é a barra de XP, o 4 é a Iris). Hoje o app me cobra e me paga em ouro, mas não me libera pro descanso sem culpa, que era metade da ideia.</li>
+      <li><strong>Não existe histórico.</strong> As dailies de ontem já viram passado por causa do campo <code>day</code>, mas não tem tela pra eu olhar a semana e ver que produzi. Pra quem tem autoavaliação descalibrada, esse retrovisor é o antídoto.</li>
+    </ul>
+    <p>
+      Taverna e pilar 3 andam juntos: a Taverna é o lugar natural pra eu comprar descanso com o
+      ouro que juntei. Esse é o meu candidato pro que vem depois dos Acessórios.
+    </p>
   </section>
 
   <section>
