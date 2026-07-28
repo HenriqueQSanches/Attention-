@@ -11,12 +11,19 @@ type Props = {
   onCharacterUpdate: (c: Character) => void;
 };
 
-type Mode = "roupas" | "assistants";
+type Mode = "roupas" | "acessorios" | "assistants";
 
 const SLOT_LABEL: Record<ShopSlot, string> = {
   torso: "Torso",
   legs:  "Pernas",
   feet:  "Pés",
+  head:  "Cabeça",
+  face:  "Rosto",
+};
+
+const SLOTS_BY_MODE: Record<"roupas" | "acessorios", ShopSlot[]> = {
+  roupas:     ["torso", "legs", "feet"],
+  acessorios: ["head", "face"],
 };
 
 const TIER_COLOR: Record<string, string> = {
@@ -34,6 +41,12 @@ export function Loja({ character, onCharacterUpdate }: Props) {
   const items = SHOP_ITEMS.filter(
     (i) => i.slot === activeSlot && i.sexes.includes(character.sex),
   );
+
+  function trocarModo(m: Mode) {
+    setMode(m);
+    setMsg(null);
+    if (m !== "assistants") setActiveSlot(SLOTS_BY_MODE[m][0]);
+  }
 
   async function run(action: () => Promise<Character>, okMsg?: string) {
     setBusy(true);
@@ -57,6 +70,8 @@ export function Loja({ character, onCharacterUpdate }: Props) {
     torso:     character.torso ?? undefined,
     legs:      character.legs ?? undefined,
     feet:      character.feet ?? undefined,
+    head:      character.head ?? undefined,
+    face:      character.face ?? undefined,
   });
 
   const equippedAssistant = assistantById(character.assistant);
@@ -69,20 +84,27 @@ export function Loja({ character, onCharacterUpdate }: Props) {
         <button
           type="button"
           className={`chip chip--text${mode === "roupas" ? " chip--on" : ""}`}
-          onClick={() => { setMode("roupas"); setMsg(null); }}
+          onClick={() => trocarModo("roupas")}
         >
           Roupas
         </button>
         <button
           type="button"
+          className={`chip chip--text${mode === "acessorios" ? " chip--on" : ""}`}
+          onClick={() => trocarModo("acessorios")}
+        >
+          Acessórios
+        </button>
+        <button
+          type="button"
           className={`chip chip--text${mode === "assistants" ? " chip--on" : ""}`}
-          onClick={() => { setMode("assistants"); setMsg(null); }}
+          onClick={() => trocarModo("assistants")}
         >
           Arautos
         </button>
       </div>
 
-      {mode === "roupas" ? (
+      {mode !== "assistants" ? (
         <>
           <div className="shop-hero">
             <CharacterCanvas layers={previewLayers} size={128} />
@@ -95,7 +117,7 @@ export function Loja({ character, onCharacterUpdate }: Props) {
           </div>
 
           <div className="shop-slots">
-            {(["torso", "legs", "feet"] as ShopSlot[]).map((slot) => {
+            {SLOTS_BY_MODE[mode].map((slot) => {
               const equipped = character[slot];
               return (
                 <div key={slot} className="shop-slot">
@@ -118,7 +140,7 @@ export function Loja({ character, onCharacterUpdate }: Props) {
           </div>
 
           <div className="shop-tabs">
-            {(["torso", "legs", "feet"] as ShopSlot[]).map((slot) => (
+            {SLOTS_BY_MODE[mode].map((slot) => (
               <button
                 key={slot}
                 type="button"

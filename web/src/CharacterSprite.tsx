@@ -9,6 +9,8 @@ type Props = {
   torso?: string;
   legs?: string;
   feet?: string;
+  head?: string;
+  face?: string;
   size?: number;
 };
 
@@ -20,8 +22,10 @@ export function CharacterSprite({
   torso,
   legs,
   feet,
+  head,
+  face,
   size = 192,
 }: Props) {
-  const layers = buildLayers({ sex, skin, hair, hairColor, torso, legs, feet });
+  const layers = buildLayers({ sex, skin, hair, hairColor, torso, legs, feet, head, face });
   return <CharacterCanvas layers={layers} size={size} />;
 }

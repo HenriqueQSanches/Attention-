@@ -1,3 +1,5 @@
+import type { ShopSlot } from "./types.ts";
+
 export type Sigil = {
   id: string;
   label: string;
@@ -123,20 +125,22 @@ export function buildLayers(opts: {
   torso?: string;
   legs?: string;
   feet?: string;
+  head?: string;
+  face?: string;
 }): string[] {
   const g = opts.sex === "M" ? "male" : "female";
-  const layers: string[] = [
-    `/sprites/body/${g}/${opts.skin}.png`,
-    `/sprites/hair/${g}/${opts.hair}/${opts.hairColor}.png`,
-  ];
-  if (opts.torso) layers.splice(1, 0, `/sprites/${opts.torso}`);
-  if (opts.legs)  layers.splice(layers.length - 1, 0, `/sprites/${opts.legs}`);
+  // A ordem aqui é a ordem de desenho: quem vem depois fica por cima
+  const layers: string[] = [`/sprites/body/${g}/${opts.skin}.png`];
+  if (opts.torso) layers.push(`/sprites/${opts.torso}`);
+  if (opts.legs)  layers.push(`/sprites/${opts.legs}`);
+  layers.push(`/sprites/hair/${g}/${opts.hair}/${opts.hairColor}.png`);
   if (opts.feet)  layers.push(`/sprites/${opts.feet}`);
+  if (opts.face)  layers.push(`/sprites/${opts.face}`);
+  if (opts.head)  layers.push(`/sprites/${opts.head}`);
   return layers;
 }
 
 // ── Catálogo da loja ──────────────────────────────────────────────────────
-export type ShopSlot = "torso" | "legs" | "feet";
 export type ShopItem = {
   id: string;
   label: string;
@@ -201,6 +205,19 @@ export const SHOP_ITEMS: ShopItem[] = [
   { id: "mfe_navy",     label: "Sapatos Marinho", slot: "feet",  price: 60,  path: "feet/shoes/male/navy.png",            sexes: ["M"], tier: "common" },
   { id: "mfe_red",      label: "Sapatos Vermelhos",slot: "feet", price: 60,  path: "feet/shoes/male/red.png",             sexes: ["M"], tier: "common" },
   { id: "mfe_white",    label: "Sapatos Brancos", slot: "feet",  price: 60,  path: "feet/shoes/male/white.png",           sexes: ["M"], tier: "common" },
+
+  // ── Acessórios (arte do LPC é a mesma pros dois sexos)
+  { id: "gl_round",     label: "Óculos Redondos",   slot: "face", price: 90,  path: "face/round/black.png",         sexes: ["M", "F"], tier: "common" },
+  { id: "gl_nerd",      label: "Óculos de Estudo",  slot: "face", price: 90,  path: "face/nerd/black.png",          sexes: ["M", "F"], tier: "common" },
+  { id: "gl_secretary", label: "Óculos Dourados",   slot: "face", price: 170, path: "face/secretary/gold.png",      sexes: ["M", "F"], tier: "rare"   },
+  { id: "gl_sun",       label: "Óculos Escuros",    slot: "face", price: 190, path: "face/sunglasses/black.png",    sexes: ["M", "F"], tier: "rare"   },
+  { id: "gl_halfmoon",  label: "Meia-Lua de Bronze",slot: "face", price: 240, path: "face/halfmoon/bronze.png",     sexes: ["M", "F"], tier: "epic"   },
+  { id: "ht_bandana_r", label: "Bandana Vermelha",  slot: "head", price: 80,  path: "head/bandana/red.png",         sexes: ["M", "F"], tier: "common" },
+  { id: "ht_bandana_b", label: "Bandana Preta",     slot: "head", price: 80,  path: "head/bandana/black.png",       sexes: ["M", "F"], tier: "common" },
+  { id: "ht_feather",   label: "Boina com Pena",    slot: "head", price: 150, path: "head/feather_cap/forest.png",  sexes: ["M", "F"], tier: "common" },
+  { id: "ht_hood",      label: "Capuz do Andarilho",slot: "head", price: 260, path: "head/hood/black.png",          sexes: ["M", "F"], tier: "rare"   },
+  { id: "ht_tophat",    label: "Cartola Preta",     slot: "head", price: 340, path: "head/tophat/black.png",        sexes: ["M", "F"], tier: "rare"   },
+  { id: "ht_wizard",    label: "Chapéu de Mago",    slot: "head", price: 520, path: "head/wizard/blue.png",         sexes: ["M", "F"], tier: "epic"   },
 ];
 
 // ── Roupa inicial na criação (o herói/heroína nasce vestido) ─────────────

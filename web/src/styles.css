@@ -912,6 +912,7 @@ body {
 .shop-modes {
   display: flex;
   gap: 8px;
+  flex-wrap: wrap;
 }
 
 .shop-hero {

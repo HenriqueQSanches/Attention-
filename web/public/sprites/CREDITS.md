@@ -1,6 +1,6 @@
 # Créditos dos sprites
 
-Os sprites de personagem (corpo, cabelo, roupas, calçados) usam arte do
+Os sprites de personagem (corpo, cabelo, roupas, calçados, chapéus e óculos) usam arte do
 **Liberated Pixel Cup (LPC)**, obtida através do Universal LPC Spritesheet
 Character Generator:
 

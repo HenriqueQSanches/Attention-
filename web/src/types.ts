@@ -12,6 +12,8 @@ export type Character = {
   torso: string | null;
   legs: string | null;
   feet: string | null;
+  head: string | null;
+  face: string | null;
   ownedItems: string[];
   assistant: string;
   ownedAssistants: string[];
@@ -19,7 +21,7 @@ export type Character = {
 };
 
 export type Screen = "home" | "pergaminho" | "casa" | "loja" | "taverna";
-export type ShopSlot = "torso" | "legs" | "feet";
+export type ShopSlot = "torso" | "legs" | "feet" | "head" | "face";
 
 export type CharacterInput = {
   name: string;
