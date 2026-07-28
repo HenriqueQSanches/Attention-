@@ -30,6 +30,16 @@ db.exec(`
     created_at   TEXT    NOT NULL,
     completed_at TEXT
   );
+
+  CREATE TABLE IF NOT EXISTS note (
+    id         INTEGER PRIMARY KEY AUTOINCREMENT,
+    title      TEXT    NOT NULL,
+    body       TEXT    NOT NULL DEFAULT '',
+    done       INTEGER NOT NULL DEFAULT 0,
+    rewarded   INTEGER NOT NULL DEFAULT 0,
+    created_at TEXT    NOT NULL,
+    done_at    TEXT
+  );
 `);
 
 try { db.exec("ALTER TABLE character ADD COLUMN gold       INTEGER NOT NULL DEFAULT 0");          } catch (_) {}
@@ -50,6 +60,7 @@ export const DAILY_XP = 25;
 export const AVULSA_XP = 60;
 export const DAILY_GOLD = 10;
 export const AVULSA_GOLD = 25;
+export const NOTE_GOLD = 1;
 export const MAX_DAILY = 3;
 
 export function xpToNext(level) {
@@ -160,7 +171,14 @@ export function equipAssistant(assistantId) {
 }
 
 export function resetCharacter() {
-  db.exec("DELETE FROM character; DELETE FROM quest;");
+  db.exec("DELETE FROM character; DELETE FROM quest; DELETE FROM note;");
+}
+
+function awardGold(amount) {
+  const row = characterRow();
+  if (!row) return null;
+  db.prepare("UPDATE character SET gold = ? WHERE id = ?").run((row.gold ?? 0) + amount, row.id);
+  return getCharacter();
 }
 
 function awardXp(xpGain, kind) {
@@ -258,5 +276,52 @@ export function deleteQuest(id) {
   const info = db.prepare("DELETE FROM quest WHERE id = ?").run(id);
   if (info.changes === 0) {
     throw Object.assign(new Error("Quest nao encontrada."), { status: 404 });
+  }
+}
+
+function toNote(row) {
+  return {
+    id: row.id,
+    title: row.title,
+    body: row.body ?? "",
+    done: !!row.done,
+    createdAt: row.created_at,
+    doneAt: row.done_at,
+  };
+}
+
+// Ordem fixa por id: o numero da linha do recado nunca muda de lugar
+export function listNotes() {
+  return db.prepare("SELECT * FROM note ORDER BY id ASC").all().map(toNote);
+}
+
+export function createNote({ title, body }) {
+  const info = db
+    .prepare("INSERT INTO note (title, body, done, rewarded, created_at) VALUES (?, ?, 0, 0, ?)")
+    .run(title, body ?? "", new Date().toISOString());
+  return toNote(db.prepare("SELECT * FROM note WHERE id = ?").get(info.lastInsertRowid));
+}
+
+export function rememberNote(id) {
+  const row = db.prepare("SELECT * FROM note WHERE id = ?").get(id);
+  if (!row) throw Object.assign(new Error("Recado nao encontrado."), { status: 404 });
+  if (row.done) {
+    return { note: toNote(row), character: getCharacter(), gained: 0 };
+  }
+  // rewarded trava o ouro em 1 por recado, mesmo se ele voltar a ser ticado
+  const gained = row.rewarded ? 0 : NOTE_GOLD;
+  db.prepare("UPDATE note SET done = 1, rewarded = 1, done_at = ? WHERE id = ?").run(
+    new Date().toISOString(),
+    id,
+  );
+  const character = gained ? awardGold(gained) : getCharacter();
+  const note = toNote(db.prepare("SELECT * FROM note WHERE id = ?").get(id));
+  return { note, character, gained };
+}
+
+export function deleteNote(id) {
+  const info = db.prepare("DELETE FROM note WHERE id = ?").run(id);
+  if (info.changes === 0) {
+    throw Object.assign(new Error("Recado nao encontrado."), { status: 404 });
   }
 }

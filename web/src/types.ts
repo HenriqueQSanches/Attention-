@@ -18,7 +18,7 @@ export type Character = {
   createdAt: string;
 };
 
-export type Screen = "home" | "casa" | "loja" | "taverna";
+export type Screen = "home" | "pergaminho" | "casa" | "loja" | "taverna";
 export type ShopSlot = "torso" | "legs" | "feet";
 
 export type CharacterInput = {
@@ -51,6 +51,21 @@ export type QuestsState = {
   today: string;
   daily: Quest[];
   avulsas: Quest[];
+};
+
+export type Note = {
+  id: number;
+  title: string;
+  body: string;
+  done: boolean;
+  createdAt: string;
+  doneAt: string | null;
+};
+
+export type RememberResult = {
+  note: Note;
+  character: Character;
+  gained: number;
 };
 
 export type CompleteResult = {

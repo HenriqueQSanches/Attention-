@@ -2,9 +2,11 @@ import type {
   Character,
   CharacterInput,
   CompleteResult,
+  Note,
   Quest,
   QuestKind,
   QuestsState,
+  RememberResult,
 } from "./types.ts";
 
 async function parse(res: Response) {
@@ -70,6 +72,30 @@ export async function completeQuest(id: number): Promise<CompleteResult> {
 
 export async function removeQuest(id: number): Promise<void> {
   await parse(await fetch(`/api/quests/${id}`, { method: "DELETE" }));
+}
+
+export async function fetchNotes(): Promise<Note[]> {
+  const data = await parse(await fetch("/api/notes"));
+  return data.notes ?? [];
+}
+
+export async function addNote(input: { title: string; body: string }): Promise<Note> {
+  const data = await parse(
+    await fetch("/api/notes", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(input),
+    }),
+  );
+  return data.note;
+}
+
+export async function rememberNote(id: number): Promise<RememberResult> {
+  return parse(await fetch(`/api/notes/${id}/remember`, { method: "POST" }));
+}
+
+export async function removeNote(id: number): Promise<void> {
+  await parse(await fetch(`/api/notes/${id}`, { method: "DELETE" }));
 }
 
 export async function buyItem(itemId: string, price: number, itemPath: string): Promise<Character> {

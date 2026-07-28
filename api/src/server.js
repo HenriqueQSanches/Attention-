@@ -4,12 +4,16 @@ import {
   buyAssistant,
   completeQuest,
   createCharacter,
+  createNote,
   createQuest,
+  deleteNote,
   deleteQuest,
   equipItem,
   equipAssistant,
   getCharacter,
+  listNotes,
   listQuests,
+  rememberNote,
   resetCharacter,
   unequipSlot,
 } from "./db.js";
@@ -111,6 +115,31 @@ const server = createServer(async (req, res) => {
     const single = path.match(/^\/api\/quests\/(\d+)$/);
     if (single && method === "DELETE") {
       deleteQuest(Number(single[1]));
+      return sendJson(res, 200, { ok: true });
+    }
+
+    // ── Pergaminho: recados que nao podem ser esquecidos ────────────────
+    if (path === "/api/notes" && method === "GET") {
+      return sendJson(res, 200, { notes: listNotes() });
+    }
+
+    if (path === "/api/notes" && method === "POST") {
+      const body = await readJson(req);
+      const title = String(body.title ?? "").trim();
+      const text = String(body.body ?? "").trim();
+      if (title.length < 3)
+        return sendJson(res, 400, { error: "Titulo do recado precisa de ao menos 3 letras." });
+      return sendJson(res, 201, { note: createNote({ title, body: text }) });
+    }
+
+    const remember = path.match(/^\/api\/notes\/(\d+)\/remember$/);
+    if (remember && method === "POST") {
+      return sendJson(res, 200, rememberNote(Number(remember[1])));
+    }
+
+    const note = path.match(/^\/api\/notes\/(\d+)$/);
+    if (note && method === "DELETE") {
+      deleteNote(Number(note[1]));
       return sendJson(res, 200, { ok: true });
     }
 

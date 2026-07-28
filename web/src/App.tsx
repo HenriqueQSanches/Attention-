@@ -4,6 +4,7 @@ import { CreateCharacter } from "./CreateCharacter.tsx";
 import { Home } from "./Home.tsx";
 import { Loja } from "./Loja.tsx";
 import { NavBar } from "./NavBar.tsx";
+import { Pergaminho } from "./Pergaminho.tsx";
 import { Taverna } from "./Taverna.tsx";
 import { fetchCharacter, resetCharacter, saveCharacter } from "./api.ts";
 import type { Character, CharacterInput, Screen } from "./types.ts";
@@ -69,6 +70,9 @@ export function App() {
           resetting={busy}
           onCharacterUpdate={setCharacter}
         />
+      )}
+      {screen === "pergaminho" && (
+        <Pergaminho character={character} onCharacterUpdate={setCharacter} />
       )}
       {screen === "casa" && <Casa character={character} />}
       {screen === "loja" && <Loja character={character} onCharacterUpdate={setCharacter} />}
