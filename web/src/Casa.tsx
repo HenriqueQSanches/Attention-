@@ -15,7 +15,16 @@ export function Casa({ character }: Props) {
       <BrandHeader title="Casa do Herói" />
 
       <section className="casa-empty">
-        <CharacterSprite sigil={character.sigil} accent={character.accent} size={90} />
+        <CharacterSprite
+          sex={character.sex}
+          skin={character.skin}
+          hair={character.hair}
+          hairColor={character.hairColor}
+          torso={character.torso ?? undefined}
+          legs={character.legs ?? undefined}
+          feet={character.feet ?? undefined}
+          size={90}
+        />
         <p className="casa-empty__title">Sem moradia</p>
         <p className="casa-empty__hint">
           Seu herói ainda não tem um lar. Conclua quests e acumule ouro para conquistar uma morada.

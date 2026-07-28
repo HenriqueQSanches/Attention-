@@ -1,3 +1,4 @@
+import type { ReactElement } from "react";
 import type { Screen } from "./types.ts";
 
 type Props = {
@@ -5,7 +6,7 @@ type Props = {
   onNavigate: (s: Screen) => void;
 };
 
-const ITEMS: { id: Screen; label: string; icon: JSX.Element }[] = [
+const ITEMS: { id: Screen; label: string; icon: ReactElement }[] = [
   {
     id: "home",
     label: "Início",
