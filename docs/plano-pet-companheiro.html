@@ -101,7 +101,7 @@
   <div class="meta">
     <span class="tag">Autor: Henrique</span>
     <span class="tag">Projeto: attention!</span>
-    <span class="tag tag--live">Status: rascunho, nada codado ainda</span>
+    <span class="tag tag--live">Status: Fase 1 codada em 29/07/2026</span>
   </div>
 
   <hr class="rule" />
@@ -387,8 +387,30 @@
     <h2>Meu plano</h2>
     <div class="phases">
       <div class="phase phase--f1">
-        <div class="phase__head"><span class="phase__no">FASE 1</span><span class="phase__name">Renomear + estrear o elenco</span><span class="phase__cost low">Complexidade baixa</span></div>
+        <div class="phase__head"><span class="phase__no">FASE 1</span><span class="phase__name">Renomear + estrear o elenco</span><span class="phase__cost low">Feita</span></div>
         <p>Acerto os nomes (Iris = assistente) e estreio com as minhas favoritas (Raposa e Cobra) mais uma ou duas, que aparecem ao lado do herói na tela inicial. Aba "Pets" nova na loja, e vou soltando o resto dos dez conforme a arte fica pronta.</p>
+        <p>
+          <strong>Feito em 29/07/2026:</strong> o acerto de nomes já estava pronto desde junho (a Iris
+          virou Arauto), então entrou a parte do bicho: colunas <code>companion</code> e
+          <code>owned_companions</code>, rotas de adotar, chamar e guardar, aba Pets na Loja e o bicho
+          desenhado ao lado do herói na Home, os dois pisando na mesma linha de chão. Estreia com
+          quatro: Cachorro 260, Gato 300, Raposa 420 e Cobra 420.
+        </p>
+        <p>
+          <strong>O "guardar" não estava no plano e eu incluí:</strong> sem ele, depois da primeira
+          adoção eu nunca mais conseguiria ficar sem bicho ao lado.
+        </p>
+        <p>
+          <strong>O que eu aprendi sobre a arte de bicho,</strong> que é diferente de tudo que fiz em
+          roupa e acessório:
+        </p>
+        <ul class="list">
+          <li><strong>Não existe grade padrão.</strong> Cada pacote tem o seu tamanho de quadro: a raposa é 64px, o cachorro 48px, gato e cobra 32px. E o quadro que encara o jogador fica numa linha diferente em cada folha. Por isso cada bicho guarda a própria spec (arquivo, tamanho do quadro, linha, coluna) e o desenho saiu num <code>Companion.tsx</code>, em vez de forçar dentro do <code>CharacterCanvas</code>, que é feito pras camadas de 64px do humano.</li>
+          <li><strong>De perfil é melhor que de frente.</strong> Animal de frente em pixel art achata e vira mancha com orelhas. De perfil ele lê como o bicho que é, e ainda fica virado pro herói, como se estivesse acompanhando. Foi o que salvou a raposa, que eu quase descartei achando que era a arte.</li>
+          <li><strong>Medir a folha antes de escolher o bicho.</strong> A folha do lobo do LPC (Redshrike) é bonita mas empacotada de forma irregular: faixa de 28px, faixa de 137px, repetindo a cada 192px. Não fecha em quadro fixo, então usar o lobo exige recortar e remontar a folha na mão. Ele fica pra depois por isso, não por falta de arte.</li>
+          <li><strong>Cada pacote tem autor e licença própria.</strong> Não é o LPC de roupa, então os pets têm o seu próprio <code>web/public/pets/CREDITS.md</code>: raposa e cachorro do pacote do tapatilorenzo (o cachorro adaptado do Sevarihk, atribuição obrigatória), gato do bluecarrot16, cobra do Calciumtrice.</li>
+          <li><strong>Ficar no elenco que eu escolhi.</strong> Eu tinha estreado com camundongo e leão, que não estão na minha lista de dez, só porque a arte estava à mão. Não colou, e os dois saíram.</li>
+        </ul>
       </div>
       <div class="phase phase--f2">
         <div class="phase__head"><span class="phase__no">FASE 2</span><span class="phase__name">Mais bichos + animação</span><span class="phase__cost low">Complexidade baixa</span></div>
