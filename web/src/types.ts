@@ -19,6 +19,8 @@ export type Character = {
   ownedItems: string[];
   assistant: string;
   ownedAssistants: string[];
+  companion: string | null;
+  ownedCompanions: string[];
   createdAt: string;
 };
 

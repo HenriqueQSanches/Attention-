@@ -4,9 +4,12 @@ import {
   buyAssistant,
   completeQuest,
   createCharacter,
+  buyCompanion,
   createNote,
   createQuest,
   deleteNote,
+  dismissCompanion,
+  equipCompanion,
   deleteQuest,
   equipItem,
   equipAssistant,
@@ -187,6 +190,28 @@ const server = createServer(async (req, res) => {
       if (!assistantId)
         return sendJson(res, 400, { error: "assistantId e obrigatorio." });
       return sendJson(res, 200, { character: equipAssistant(assistantId) });
+    }
+
+    // ── Pets: adotar / colocar ao lado / guardar ─────────────────────────
+    if (path === "/api/companions/buy" && method === "POST") {
+      const body = await readJson(req);
+      const companionId = String(body.companionId ?? "").trim();
+      const price = Number(body.price);
+      if (!companionId || !Number.isFinite(price) || price < 0)
+        return sendJson(res, 400, { error: "companionId e price validos sao obrigatorios." });
+      return sendJson(res, 200, { character: buyCompanion(companionId, price) });
+    }
+
+    if (path === "/api/companions/equip" && method === "POST") {
+      const body = await readJson(req);
+      const companionId = String(body.companionId ?? "").trim();
+      if (!companionId)
+        return sendJson(res, 400, { error: "companionId e obrigatorio." });
+      return sendJson(res, 200, { character: equipCompanion(companionId) });
+    }
+
+    if (path === "/api/companions/dismiss" && method === "POST") {
+      return sendJson(res, 200, { character: dismissCompanion() });
     }
 
     sendJson(res, 404, { error: "Rota nao encontrada." });

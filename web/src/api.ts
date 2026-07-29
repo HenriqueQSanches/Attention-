@@ -142,6 +142,33 @@ export async function buyAssistant(assistantId: string, price: number): Promise<
   return data.character;
 }
 
+export async function buyCompanion(companionId: string, price: number): Promise<Character> {
+  const data = await parse(
+    await fetch("/api/companions/buy", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ companionId, price }),
+    }),
+  );
+  return data.character;
+}
+
+export async function equipCompanion(companionId: string): Promise<Character> {
+  const data = await parse(
+    await fetch("/api/companions/equip", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ companionId }),
+    }),
+  );
+  return data.character;
+}
+
+export async function dismissCompanion(): Promise<Character> {
+  const data = await parse(await fetch("/api/companions/dismiss", { method: "POST" }));
+  return data.character;
+}
+
 export async function equipAssistant(assistantId: string): Promise<Character> {
   const data = await parse(
     await fetch("/api/assistants/equip", {

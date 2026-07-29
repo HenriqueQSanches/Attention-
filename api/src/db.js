@@ -59,6 +59,8 @@ try { db.exec("ALTER TABLE character RENAME COLUMN pet TO assistant");          
 try { db.exec("ALTER TABLE character RENAME COLUMN owned_pets TO owned_assistants");                   } catch (_) {}
 try { db.exec("ALTER TABLE character ADD COLUMN assistant        TEXT NOT NULL DEFAULT 'bolt'");       } catch (_) {}
 try { db.exec("ALTER TABLE character ADD COLUMN owned_assistants TEXT NOT NULL DEFAULT '[\"bolt\"]'"); } catch (_) {}
+try { db.exec("ALTER TABLE character ADD COLUMN companion        TEXT");                               } catch (_) {}
+try { db.exec("ALTER TABLE character ADD COLUMN owned_companions TEXT NOT NULL DEFAULT '[]'");         } catch (_) {}
 
 export const DAILY_XP = 25;
 export const AVULSA_XP = 60;
@@ -100,6 +102,8 @@ function toCharacter(row) {
     ownedItems:      JSON.parse(row.owned_items ?? "[]"),
     assistant:       row.assistant ?? "bolt",
     ownedAssistants: JSON.parse(row.owned_assistants ?? '["bolt"]'),
+    companion:       row.companion ?? null,
+    ownedCompanions: JSON.parse(row.owned_companions ?? "[]"),
     createdAt:       row.created_at,
   };
 }
@@ -175,6 +179,35 @@ export function equipAssistant(assistantId) {
   const owned = JSON.parse(row.owned_assistants ?? '["bolt"]');
   if (!owned.includes(assistantId)) throw Object.assign(new Error("Arauto nao desbloqueado."), { status: 403 });
   db.prepare("UPDATE character SET assistant = ? WHERE id = ?").run(assistantId, row.id);
+  return getCharacter();
+}
+
+export function buyCompanion(companionId, price) {
+  const row = characterRow();
+  if (!row) throw Object.assign(new Error("Personagem nao encontrado."), { status: 404 });
+  const gold = row.gold ?? 0;
+  if (gold < price) throw Object.assign(new Error("Ouro insuficiente."), { status: 402 });
+  const owned = JSON.parse(row.owned_companions ?? "[]");
+  if (owned.includes(companionId)) throw Object.assign(new Error("Bicho ja adotado."), { status: 409 });
+  owned.push(companionId);
+  db.prepare("UPDATE character SET gold = ?, owned_companions = ? WHERE id = ?")
+    .run(gold - price, JSON.stringify(owned), row.id);
+  return getCharacter();
+}
+
+export function equipCompanion(companionId) {
+  const row = characterRow();
+  if (!row) throw Object.assign(new Error("Personagem nao encontrado."), { status: 404 });
+  const owned = JSON.parse(row.owned_companions ?? "[]");
+  if (!owned.includes(companionId)) throw Object.assign(new Error("Bicho nao adotado."), { status: 403 });
+  db.prepare("UPDATE character SET companion = ? WHERE id = ?").run(companionId, row.id);
+  return getCharacter();
+}
+
+export function dismissCompanion() {
+  const row = characterRow();
+  if (!row) throw Object.assign(new Error("Personagem nao encontrado."), { status: 404 });
+  db.prepare("UPDATE character SET companion = NULL WHERE id = ?").run(row.id);
   return getCharacter();
 }
 

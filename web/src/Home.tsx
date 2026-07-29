@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { BrandHeader } from "./BrandHeader.tsx";
 import { CharacterSprite } from "./CharacterSprite.tsx";
+import { Companion } from "./Companion.tsx";
 import { QuestSection } from "./QuestSection.tsx";
 import { QuestForge } from "./QuestForge.tsx";
-import { xpToNext } from "./data.ts";
+import { companionById, xpToNext } from "./data.ts";
 import { addQuest, completeQuest, fetchQuests, removeQuest } from "./api.ts";
 import type { Character, Quest, QuestKind } from "./types.ts";
 
@@ -85,26 +86,30 @@ export function Home({
 
   const need = xpToNext(character.level);
   const pct = Math.min(100, Math.round((character.xp / need) * 100));
+  const bicho = character.companion ? companionById(character.companion) : null;
 
   return (
     <main className="screen screen--with-nav" style={{ ["--accent" as string]: character.accent }}>
       <BrandHeader sub="A vida inteira essa palavra veio como bronca. Aqui, pela primeira vez, ela está do seu lado." />
 
       <section className="hero">
-        <CharacterSprite
-          sex={character.sex}
-          skin={character.skin}
-          hair={character.hair}
-          hairColor={character.hairColor}
-          torso={character.torso ?? undefined}
-          legs={character.legs ?? undefined}
-          feet={character.feet ?? undefined}
-          head={character.head ?? undefined}
-          face={character.face ?? undefined}
-          ears={character.ears ?? undefined}
-          neck={character.neck ?? undefined}
-          size={128}
-        />
+        <div className="hero__stage">
+          <CharacterSprite
+            sex={character.sex}
+            skin={character.skin}
+            hair={character.hair}
+            hairColor={character.hairColor}
+            torso={character.torso ?? undefined}
+            legs={character.legs ?? undefined}
+            feet={character.feet ?? undefined}
+            head={character.head ?? undefined}
+            face={character.face ?? undefined}
+            ears={character.ears ?? undefined}
+            neck={character.neck ?? undefined}
+            size={128}
+          />
+          {bicho && <Companion companion={bicho} scale={2} />}
+        </div>
         <h1 className="hero__name">{character.name}</h1>
         <p className="hero__level">Nível {character.level}</p>
 

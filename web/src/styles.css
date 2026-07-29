@@ -865,6 +865,14 @@ body {
   letter-spacing: 0.04em;
 }
 
+/* Palco do hero: heroi e bicho pisando na mesma linha de chao */
+.hero__stage {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 2px;
+}
+
 /* Ouro no hero */
 .gold-chip {
   display: flex;
@@ -909,10 +917,11 @@ body {
 }
 
 /* Loja */
+/* Quatro modos nao caber numa linha de 375px, entao viram grade 2x2 */
 .shop-modes {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
   gap: 8px;
-  flex-wrap: wrap;
 }
 
 .shop-hero {
@@ -1027,6 +1036,14 @@ body {
   font-weight: 600;
   letter-spacing: 0.05em;
   text-transform: uppercase;
+}
+
+.shop-card__line {
+  margin: -1px 0 2px;
+  font-size: 11.5px;
+  line-height: 1.35;
+  text-align: center;
+  color: var(--muted);
 }
 
 .shop-card__badge {

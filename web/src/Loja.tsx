@@ -1,9 +1,27 @@
 import { useState } from "react";
-import { buyItem, buyAssistant, equipItem, equipAssistant, unequipSlot } from "./api.ts";
+import {
+  buyItem,
+  buyAssistant,
+  buyCompanion,
+  dismissCompanion,
+  equipItem,
+  equipAssistant,
+  equipCompanion,
+  unequipSlot,
+} from "./api.ts";
 import { BrandHeader } from "./BrandHeader.tsx";
 import { CharacterCanvas } from "./CharacterCanvas.tsx";
 import { Assistant } from "./Assistant.tsx";
-import { ASSISTANTS, SHOP_ITEMS, TIER_LABEL, buildLayers, assistantById } from "./data.ts";
+import { Companion } from "./Companion.tsx";
+import {
+  ASSISTANTS,
+  COMPANIONS,
+  SHOP_ITEMS,
+  TIER_LABEL,
+  buildLayers,
+  assistantById,
+  companionById,
+} from "./data.ts";
 import type { Character, ShopSlot } from "./types.ts";
 
 type Props = {
@@ -11,7 +29,7 @@ type Props = {
   onCharacterUpdate: (c: Character) => void;
 };
 
-type Mode = "roupas" | "acessorios" | "assistants";
+type Mode = "roupas" | "acessorios" | "pets" | "assistants";
 
 const SLOT_LABEL: Record<ShopSlot, string> = {
   torso: "Torso",
@@ -47,7 +65,7 @@ export function Loja({ character, onCharacterUpdate }: Props) {
   function trocarModo(m: Mode) {
     setMode(m);
     setMsg(null);
-    if (m !== "assistants") setActiveSlot(SLOTS_BY_MODE[m][0]);
+    if (m === "roupas" || m === "acessorios") setActiveSlot(SLOTS_BY_MODE[m][0]);
   }
 
   async function run(action: () => Promise<Character>, okMsg?: string) {
@@ -79,6 +97,7 @@ export function Loja({ character, onCharacterUpdate }: Props) {
   });
 
   const equippedAssistant = assistantById(character.assistant);
+  const bichoAtivo = character.companion ? companionById(character.companion) : null;
 
   return (
     <main className="screen screen--with-nav" style={{ ["--accent" as string]: character.accent }}>
@@ -101,6 +120,13 @@ export function Loja({ character, onCharacterUpdate }: Props) {
         </button>
         <button
           type="button"
+          className={`chip chip--text${mode === "pets" ? " chip--on" : ""}`}
+          onClick={() => trocarModo("pets")}
+        >
+          Pets
+        </button>
+        <button
+          type="button"
           className={`chip chip--text${mode === "assistants" ? " chip--on" : ""}`}
           onClick={() => trocarModo("assistants")}
         >
@@ -108,7 +134,7 @@ export function Loja({ character, onCharacterUpdate }: Props) {
         </button>
       </div>
 
-      {mode !== "assistants" ? (
+      {mode === "roupas" || mode === "acessorios" ? (
         <>
           <div className="shop-hero">
             <CharacterCanvas layers={previewLayers} size={128} />
@@ -203,6 +229,87 @@ export function Loja({ character, onCharacterUpdate }: Props) {
                         <path d="M 8 2 L 14 8 L 8 14 L 2 8 Z" />
                       </svg>
                       {item.price}
+                    </button>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </>
+      ) : mode === "pets" ? (
+        <>
+          <div className="shop-hero">
+            {bichoAtivo ? (
+              <>
+                <Companion companion={bichoAtivo} scale={3} />
+                <p className="shop-hero__caption">{bichoAtivo.name} anda contigo</p>
+              </>
+            ) : (
+              <p className="shop-hero__caption">Você ainda não tem bicho nenhum ao seu lado.</p>
+            )}
+            <div className="shop-gold">
+              <svg viewBox="0 0 16 16" fill="currentColor" width="14" height="14">
+                <path d="M 8 2 L 14 8 L 8 14 L 2 8 Z" />
+              </svg>
+              {character.gold} ouro
+            </div>
+          </div>
+
+          {bichoAtivo && (
+            <div className="shop-slots">
+              <div className="shop-slot">
+                <span className="shop-slot__label">Ao seu lado</span>
+                <button
+                  className="chip chip--text chip--on"
+                  type="button"
+                  onClick={() => run(() => dismissCompanion())}
+                  disabled={busy}
+                >
+                  Guardar
+                </button>
+              </div>
+            </div>
+          )}
+
+          {msg && <p className="shop-msg">{msg}</p>}
+
+          <div className="shop-grid">
+            {COMPANIONS.map((c) => {
+              const owned = character.ownedCompanions.includes(c.id);
+              const ativo = character.companion === c.id;
+              return (
+                <div key={c.id} className={`shop-card${ativo ? " shop-card--equipped" : ""}`}>
+                  <div className="shop-card__sprite">
+                    <Companion companion={c} scale={80 / c.frame} />
+                  </div>
+                  <p className="shop-card__name">{c.name}</p>
+                  <p className="shop-card__tier" style={{ color: TIER_COLOR[c.tier] }}>
+                    {TIER_LABEL[c.tier]}
+                  </p>
+                  <p className="shop-card__line">{c.line}</p>
+                  {ativo ? (
+                    <span className="shop-card__badge">Ao seu lado</span>
+                  ) : owned ? (
+                    <button
+                      className="shop-card__btn"
+                      type="button"
+                      onClick={() => run(() => equipCompanion(c.id))}
+                      disabled={busy}
+                    >
+                      Chamar
+                    </button>
+                  ) : (
+                    <button
+                      className="shop-card__btn"
+                      type="button"
+                      onClick={() => run(() => buyCompanion(c.id, c.price), `${c.name} adotado! Chame ele abaixo.`)}
+                      disabled={busy || character.gold < c.price}
+                      title={character.gold < c.price ? "Ouro insuficiente" : undefined}
+                    >
+                      <svg viewBox="0 0 16 16" fill="currentColor" width="11" height="11">
+                        <path d="M 8 2 L 14 8 L 8 14 L 2 8 Z" />
+                      </svg>
+                      {c.price}
                     </button>
                   )}
                 </div>

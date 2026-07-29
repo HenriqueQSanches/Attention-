@@ -294,6 +294,34 @@ export const ASSISTANTS: Assistant[] = [
   { id: "titan", name: "Titan", seed: "titan-core-01",      price: 550, tier: "epic",   line: "Titan em campo. Missões colossais são a minha especialidade." },
 ];
 
+// ── Pets (bichos ao lado do herói) ───────────────────────────────────────
+// Folha de animal não segue a grade do LPC humano: cada pacote tem tamanho de
+// quadro e ordem de direção próprios, então cada bicho guarda a própria spec.
+export type Companion = {
+  id: string;
+  name: string;
+  sheet: string;   // arquivo em /pets/
+  frame: number;   // lado do quadro em pixels
+  row: number;     // linha do quadro que encara o jogador
+  col: number;
+  price: number;
+  tier: "common" | "rare" | "epic";
+  line: string;    // o que o bicho é, na ficha da loja
+};
+
+// A linha é escolhida bicho por bicho olhando o resultado: de frente o animal
+// achata, de perfil ele lê melhor e ainda fica virado para o herói.
+export const COMPANIONS: Companion[] = [
+  { id: "cachorro", name: "Cachorro", sheet: "cachorro.png", frame: 48, row: 0, col: 0,  price: 260, tier: "common", line: "Não questiona teus planos, só te acompanha." },
+  { id: "gato",     name: "Gato",     sheet: "gato.png",     frame: 32, row: 0, col: 12, price: 300, tier: "common", line: "Vai ficar do teu lado, mas foi ideia dele." },
+  { id: "raposa",   name: "Raposa",   sheet: "raposa.png",   frame: 64, row: 1, col: 0, price: 420, tier: "rare",   line: "Esperta o suficiente pra te achar quando você se perde." },
+  { id: "cobra",    name: "Cobra",    sheet: "cobra.png",    frame: 32, row: 0, col: 0, price: 420, tier: "rare",   line: "Silenciosa, paciente, e ninguém mexe com você." },
+];
+
+export function companionById(id: string): Companion | null {
+  return COMPANIONS.find((c) => c.id === id) ?? null;
+}
+
 export function assistantById(id: string): Assistant {
   return ASSISTANTS.find((a) => a.id === id) ?? ASSISTANTS[0];
 }
