@@ -127,14 +127,20 @@ export function buildLayers(opts: {
   feet?: string;
   head?: string;
   face?: string;
+  ears?: string;
+  neck?: string;
 }): string[] {
   const g = opts.sex === "M" ? "male" : "female";
-  // A ordem aqui é a ordem de desenho: quem vem depois fica por cima
+  // A ordem aqui é a ordem de desenho: quem vem depois fica por cima.
+  // Brinco e colar vão depois do cabelo de propósito: sob o cabelo longo eles
+  // ficam invisíveis, e item comprado precisa aparecer.
   const layers: string[] = [`/sprites/body/${g}/${opts.skin}.png`];
   if (opts.torso) layers.push(`/sprites/${opts.torso}`);
   if (opts.legs)  layers.push(`/sprites/${opts.legs}`);
   layers.push(`/sprites/hair/${g}/${opts.hair}/${opts.hairColor}.png`);
   if (opts.feet)  layers.push(`/sprites/${opts.feet}`);
+  if (opts.neck)  layers.push(`/sprites/${opts.neck}`);
+  if (opts.ears)  layers.push(`/sprites/${opts.ears}`);
   if (opts.face)  layers.push(`/sprites/${opts.face}`);
   if (opts.head)  layers.push(`/sprites/${opts.head}`);
   return layers;
@@ -218,6 +224,25 @@ export const SHOP_ITEMS: ShopItem[] = [
   { id: "ht_hood",      label: "Capuz do Andarilho",slot: "head", price: 260, path: "head/hood/black.png",          sexes: ["M", "F"], tier: "rare"   },
   { id: "ht_tophat",    label: "Cartola Preta",     slot: "head", price: 340, path: "head/tophat/black.png",        sexes: ["M", "F"], tier: "rare"   },
   { id: "ht_wizard",    label: "Chapéu de Mago",    slot: "head", price: 520, path: "head/wizard/blue.png",         sexes: ["M", "F"], tier: "epic"   },
+
+  // ── Brincos e colares (aqui a arte do LPC é separada por sexo)
+  { id: "ea_stud_gold_m",   label: "Brinco de Ouro",     slot: "ears", price: 110, path: "ears/stud/male/gold.png",         sexes: ["M"], tier: "common" },
+  { id: "ea_stud_gold_f",   label: "Brinco de Ouro",     slot: "ears", price: 110, path: "ears/stud/female/gold.png",       sexes: ["F"], tier: "common" },
+  { id: "ea_stud_silver_m", label: "Brinco de Prata",    slot: "ears", price: 110, path: "ears/stud/male/silver.png",       sexes: ["M"], tier: "common" },
+  { id: "ea_stud_silver_f", label: "Brinco de Prata",    slot: "ears", price: 110, path: "ears/stud/female/silver.png",     sexes: ["F"], tier: "common" },
+  { id: "ea_moon_m",        label: "Brinco Lua",         slot: "ears", price: 210, path: "ears/moon/male/silver.png",       sexes: ["M"], tier: "rare"   },
+  { id: "ea_moon_f",        label: "Brinco Lua",         slot: "ears", price: 210, path: "ears/moon/female/silver.png",     sexes: ["F"], tier: "rare"   },
+
+  { id: "nk_chain_m",       label: "Corrente de Ouro",   slot: "neck", price: 180, path: "neck/chain/male/gold.png",        sexes: ["M"], tier: "common" },
+  { id: "nk_chain_f",       label: "Corrente de Ouro",   slot: "neck", price: 180, path: "neck/chain/female/gold.png",      sexes: ["F"], tier: "common" },
+  { id: "nk_beaded_m",      label: "Colar de Contas",    slot: "neck", price: 150, path: "neck/beaded/male/silver.png",     sexes: ["M"], tier: "common" },
+  { id: "nk_beaded_f",      label: "Colar de Contas",    slot: "neck", price: 150, path: "neck/beaded/female/silver.png",   sexes: ["F"], tier: "common" },
+  { id: "nk_bowtie",        label: "Gravata Borboleta",  slot: "neck", price: 140, path: "neck/bowtie/black.png",           sexes: ["M", "F"], tier: "common" },
+  { id: "nk_scarf",         label: "Cachecol Vermelho",  slot: "neck", price: 130, path: "neck/scarf/red.png",              sexes: ["M", "F"], tier: "common" },
+  { id: "nk_pearl_m",       label: "Pingente Roxo",      slot: "neck", price: 300, path: "neck/pearl/male/purple.png",      sexes: ["M"], tier: "rare"   },
+  { id: "nk_pearl_f",       label: "Pingente Roxo",      slot: "neck", price: 300, path: "neck/pearl/female/purple.png",    sexes: ["F"], tier: "rare"   },
+  { id: "nk_star_m",        label: "Amuleto Estrela",    slot: "neck", price: 460, path: "neck/star/male/silver_blue.png",   sexes: ["M"], tier: "epic"   },
+  { id: "nk_star_f",        label: "Amuleto Estrela",    slot: "neck", price: 460, path: "neck/star/female/silver_blue.png", sexes: ["F"], tier: "epic"   },
 ];
 
 // ── Roupa inicial na criação (o herói/heroína nasce vestido) ─────────────

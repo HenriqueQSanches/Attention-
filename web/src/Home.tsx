@@ -101,6 +101,8 @@ export function Home({
           feet={character.feet ?? undefined}
           head={character.head ?? undefined}
           face={character.face ?? undefined}
+          ears={character.ears ?? undefined}
+          neck={character.neck ?? undefined}
           size={128}
         />
         <h1 className="hero__name">{character.name}</h1>

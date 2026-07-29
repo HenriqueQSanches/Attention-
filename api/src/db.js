@@ -53,6 +53,8 @@ try { db.exec("ALTER TABLE character ADD COLUMN feet       TEXT");              
 try { db.exec("ALTER TABLE character ADD COLUMN owned_items TEXT   NOT NULL DEFAULT '[]'");            } catch (_) {}
 try { db.exec("ALTER TABLE character ADD COLUMN head       TEXT");                                  } catch (_) {}
 try { db.exec("ALTER TABLE character ADD COLUMN face       TEXT");                                  } catch (_) {}
+try { db.exec("ALTER TABLE character ADD COLUMN ears       TEXT");                                  } catch (_) {}
+try { db.exec("ALTER TABLE character ADD COLUMN neck       TEXT");                                  } catch (_) {}
 try { db.exec("ALTER TABLE character RENAME COLUMN pet TO assistant");                                 } catch (_) {}
 try { db.exec("ALTER TABLE character RENAME COLUMN owned_pets TO owned_assistants");                   } catch (_) {}
 try { db.exec("ALTER TABLE character ADD COLUMN assistant        TEXT NOT NULL DEFAULT 'bolt'");       } catch (_) {}
@@ -93,6 +95,8 @@ function toCharacter(row) {
     feet:       row.feet ?? null,
     head:       row.head ?? null,
     face:       row.face ?? null,
+    ears:       row.ears ?? null,
+    neck:       row.neck ?? null,
     ownedItems:      JSON.parse(row.owned_items ?? "[]"),
     assistant:       row.assistant ?? "bolt",
     ownedAssistants: JSON.parse(row.owned_assistants ?? '["bolt"]'),

@@ -19,11 +19,13 @@ const SLOT_LABEL: Record<ShopSlot, string> = {
   feet:  "Pés",
   head:  "Cabeça",
   face:  "Rosto",
+  ears:  "Orelhas",
+  neck:  "Pescoço",
 };
 
 const SLOTS_BY_MODE: Record<"roupas" | "acessorios", ShopSlot[]> = {
   roupas:     ["torso", "legs", "feet"],
-  acessorios: ["head", "face"],
+  acessorios: ["head", "face", "ears", "neck"],
 };
 
 const TIER_COLOR: Record<string, string> = {
@@ -72,6 +74,8 @@ export function Loja({ character, onCharacterUpdate }: Props) {
     feet:      character.feet ?? undefined,
     head:      character.head ?? undefined,
     face:      character.face ?? undefined,
+    ears:      character.ears ?? undefined,
+    neck:      character.neck ?? undefined,
   });
 
   const equippedAssistant = assistantById(character.assistant);

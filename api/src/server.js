@@ -156,7 +156,7 @@ const server = createServer(async (req, res) => {
     if (path === "/api/character/equip" && method === "POST") {
       const body = await readJson(req);
       const { itemPath, slot } = body;
-      const VALID_SLOTS = ["torso", "legs", "feet", "head", "face"];
+      const VALID_SLOTS = ["torso", "legs", "feet", "head", "face", "ears", "neck"];
       if (!itemPath || !VALID_SLOTS.includes(slot))
         return sendJson(res, 400, { error: "itemPath e slot valido sao obrigatorios." });
       return sendJson(res, 200, { character: equipItem(itemPath, slot) });
@@ -165,7 +165,7 @@ const server = createServer(async (req, res) => {
     if (path === "/api/character/unequip" && method === "POST") {
       const body = await readJson(req);
       const { slot } = body;
-      const VALID_SLOTS = ["torso", "legs", "feet", "head", "face"];
+      const VALID_SLOTS = ["torso", "legs", "feet", "head", "face", "ears", "neck"];
       if (!VALID_SLOTS.includes(slot))
         return sendJson(res, 400, { error: "Slot invalido." });
       return sendJson(res, 200, { character: unequipSlot(slot) });

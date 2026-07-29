@@ -25,6 +25,8 @@ export function Casa({ character }: Props) {
           feet={character.feet ?? undefined}
           head={character.head ?? undefined}
           face={character.face ?? undefined}
+          ears={character.ears ?? undefined}
+          neck={character.neck ?? undefined}
           size={90}
         />
         <p className="casa-empty__title">Sem moradia</p>
